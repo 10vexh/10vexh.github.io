@@ -159,113 +159,39 @@
             
     
     
-        <article class="kratos-hentry kratos-entry-border-new clearfix">
-            <div class="kratos-status">
+        <article class="kratos-hentry clearfix">
+            <div class="kratos-entry-border-new clearfix">
                 
-                    <i class="fa fa-refresh"></i>
-                
-                <div class="kratos-status-inner">
-                    <div class="kratos-status-content">
+                <div class="kratos-entry-thumb-new">
+                    <a href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/">
                         
-                            <h1 id="CTFHub-Web-HTTP协议"><a href="#CTFHub-Web-HTTP协议" class="headerlink" title="CTFHub-Web-HTTP协议"></a>CTFHub-Web-HTTP协议</h1><p>​        超文本传输协议（Hyper Text Transfer Protocol，HTTP），运行在TCP上。</p>
-<p>​        HTTP协议工作于客户端-服务端架构上。浏览器作为HTTP客户端通过URL向HTTP服务端即WEB服务器发送所有请求。</p>
-<p>​        Web服务器有：Apache服务器，IIS服务器（Internet Information Services）等。</p>
-<p>​        Web服务器根据接收到的请求后，向客户端发送响应信息。</p>
-<p>​        HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。</p>
-<h2 id="请求方式"><a href="#请求方式" class="headerlink" title="请求方式"></a>请求方式</h2><p>题目要求：HTTP 请求方法, HTTP/1.1协议中共定义了八种方法（也叫动作）来以不同方式操作指定的资源。</p>
-<p>然而我找了九种方法。。我们最常见的还是GET和POST</p>
-<table>
-<thead>
-<tr>
-<th align="left">序号</th>
-<th align="left">方法</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">1</td>
-<td align="left">GET</td>
-<td align="left">请求指定的页面信息，并返回实体主体。</td>
-</tr>
-<tr>
-<td align="left">2</td>
-<td align="left">HEAD</td>
-<td align="left">类似于 GET 请求，只不过返回的响应中没有具体的内容，用于获取报头</td>
-</tr>
-<tr>
-<td align="left">3</td>
-<td align="left">POST</td>
-<td align="left">向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST 请求可能会导致新的资源的建立和/或已有资源的修改。</td>
-</tr>
-<tr>
-<td align="left">4</td>
-<td align="left">PUT</td>
-<td align="left">从客户端向服务器传送的数据取代指定的文档的内容。</td>
-</tr>
-<tr>
-<td align="left">5</td>
-<td align="left">DELETE</td>
-<td align="left">请求服务器删除指定的页面。</td>
-</tr>
-<tr>
-<td align="left">6</td>
-<td align="left">CONNECT</td>
-<td align="left">HTTP/1.1 协议中预留给能够将连接改为管道方式的代理服务器。</td>
-</tr>
-<tr>
-<td align="left">7</td>
-<td align="left">OPTIONS</td>
-<td align="left">允许客户端查看服务器的性能。</td>
-</tr>
-<tr>
-<td align="left">8</td>
-<td align="left">TRACE</td>
-<td align="left">回显服务器收到的请求，主要用于测试或诊断。</td>
-</tr>
-<tr>
-<td align="left">9</td>
-<td align="left">PATCH</td>
-<td align="left">是对 PUT 方法的补充，用来对已知资源进行局部更新 。</td>
-</tr>
-</tbody></table>
-<p>题目打开存在.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP Method is GET</span><br><span class="line"></span><br><span class="line">Use CTF**B Method, I will give you flag.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Hint: If you got 「HTTP Method Not Allowed」 Error, you should request index.php.</span><br></pre></td></tr></table></figure>
-
-<p>表示现在用了GET的方法，然后我们要切换成<code>CTF**B</code>方法。直接盲猜为<code>CTFHUB</code>，利用<code>burpsuite</code>抓包更改即可。</p>
-<p><img src="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/%E8%AF%B7%E6%B1%82%E6%96%B9%E5%BC%8F.png" alt="请求方式"></p>
-<h2 id="302跳转"><a href="#302跳转" class="headerlink" title="302跳转"></a>302跳转</h2><p>题目要求：HTTP临时重定向</p>
-<p>302跳转就是重定向，临时移动。与301类似。但资源只是临时被移动。客户端应继续使用原有URI。301则是永久移动。</p>
-<p>打开来，点击<code>Give me Flag</code>好像没有反应，但是实际上已经发生了跳转。</p>
-<p>我们利用bp抓包</p>
-<p><img src="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/302%E8%B7%B3%E8%BD%AC.png" alt="302跳转"></p>
-<p>直接右键<code>Send to Repeater</code>然后按<code>Go</code>重新把这包发一次就行了</p>
-<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p>题目要求：Cookie欺骗、认证、伪造</p>
-<p>Cookie可以理解成是登录者上网的身份证，这题里他能认证你是否为管理员，我们通过修改cookie实现越权漏洞。</p>
-<p>打开来题目提示</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello guest. only admin can get flag.</span><br></pre></td></tr></table></figure>
-
-<p>我们直接抓包。修改<code>admin=1</code>重新再放一次就能得到flag</p>
-<h2 id="基础认证"><a href="#基础认证" class="headerlink" title="基础认证"></a>基础认证</h2><p>题目要求：在HTTP中，基本认证（英语：Basic access authentication）是允许http用户代理（如：网页浏览器）在请求时，提供 用户名 和 密码 的一种方式。详情请查看 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTTP%E5%9F%BA%E6%9C%AC%E8%AE%A4%E8%AF%81">https://zh.wikipedia.org/wiki/HTTP基本认证</a></p>
-<p>我们打开后发现点击cilck都会返回一个登录框，我们随便进行输入然后抓包发现返回包存在了我们刚才输入的账号密码均为admin的base64形式<img src="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/%E5%9F%BA%E7%A1%80%E8%AE%A4%E8%AF%811.png" alt="基础认证1"></p>
-<p>然后再看respond包里面存在了提示</p>
-<p><img src="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/%E5%9F%BA%E7%A1%80%E8%AE%A4%E8%AF%812.png" alt="基础认证2"></p>
-<p>我们因此可以知道admin应该就是用户名，密码则可以利用题目给的附件中爆破进行得出。</p>
-<p>将字典导入，然后增加前缀，增加编码方式，取消url编码处理</p>
-<p><img src="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/%E5%9F%BA%E7%A1%80%E8%AE%A4%E8%AF%813.png" alt="基础认证3"></p>
-<p>最后爆破得到的respond响应包存在flag</p>
-<p><img src="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/%E5%9F%BA%E7%A1%80%E8%AE%A4%E8%AF%814.png" alt="基础认证4"></p>
-<h2 id="响应包源代码"><a href="#响应包源代码" class="headerlink" title="响应包源代码"></a>响应包源代码</h2><p>题目要求：HTTP响应包源代码查看</p>
-<p>直接<code>F12</code>查看源代码，flag在备注中。</p>
-
+                            <img class="kratos-entry-thumb-new-img">
                         
+                    </a>
+                </div>
+                <div class="kratos-post-inner-new">
+                    <header class="kratos-entry-header-new">
+                            
+                        <h2 class="kratos-entry-title-new"><a href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/">CTFHub-Web-HTTP协议</a>
+                    </header>
+                    <div class="kratos-entry-content-new">
+                        <p>
+                            
+                                CTFHub-Web-HTTP协议​        超文本传输协议（Hyper Text Transfer Protocol，HTTP），运行在TCP上。
+​        HTTP协议工作于客户端-服务端架构上。浏览器作为HTTP客...
+                            
+                        </p>
                     </div>
                 </div>
-            </div>
-            
                 <footer class="kratos-post-meta-new">
                     <span class="pull-left">
-                        <a><i class="fa fa-calendar"></i></a><a>2022-02-13</a>
-                        
+                        <a>
+                            <i class="fa fa-calendar"></i>
+                            2022-02-13
+                        </a>
+                        <a>
+                            
+                        </a>
                         
                             <!-- 当前仅支持valine/waline自带的统计功能 -->
                             
@@ -275,15 +201,11 @@
                             
                         
                     </span>
-                    
-                    
-                        <span class="pull-right">
-                            <a class="read-more" href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/" title="留言">留言<i class="fa fa-chevron-circle-right"></i></a>
-                        </span>
-                    
-
+                    <span class="pull-right">
+                        <a class="read-more" href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/" title="阅读全文">阅读全文<i class="fa fa-chevron-circle-right"></i></a>
+                    </span>
                 </footer>
-            
+            </div>
         </article>
     
 
@@ -491,6 +413,9 @@
         
         
           
+          
+            <a class="list-group-item" href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/"><i class="fa  fa-book"></i> CTFHub-Web-HTTP协议</a>
+            
           
         
           
