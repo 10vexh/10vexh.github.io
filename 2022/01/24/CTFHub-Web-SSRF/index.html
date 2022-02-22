@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://10vexh.top/null">
 <meta property="article:published_time" content="2022-01-24T13:15:03.000Z">
-<meta property="article:modified_time" content="2022-02-13T08:33:15.428Z">
+<meta property="article:modified_time" content="2022-02-21T12:23:31.374Z">
 <meta property="article:author" content="10vexh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://10vexh.top/null">
@@ -172,7 +172,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~9.31K
+                        ~9.25K
                     
                     字
                 </li>
@@ -181,7 +181,7 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1644741195428"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1645446211374"></time> 前，其中的内容可能需要更新。
             </div>
             
                 <div class="kratos-post-inner-toc">
@@ -336,7 +336,7 @@
 <p>我的理解就是受害者先访问了攻击者预先设置好的网站，这网站可能是伪造的，然后攻击者先返回给受害者真实的IP地址，设置ttl值为1秒，让受害者的机器缓存很快就失效，然后受害者的浏览器再次向攻击者的网站进行请求http加载网页，攻击者进行回应并加载一些恶意代码，不断地让受害者向攻击者发出post请求。由于上面设置的ttl时间过短，浏览器会再次发出请求得到ip地址，此时攻击者的dns服务器收到查询，就把ip换成任意一个内网设备的ip，然后由于满足了同源策略，浏览器会认为是安全的，就就向内网其他的设备发送post恶意请求，到达了攻击的效果。在整个过程中，受害者访问的都是同一个域名，因此认为这是安全的，造成了DNS 重绑定的效果</p>
 <p>我们可以通过这网站</p>
 <p><a target="_blank" rel="noopener" href="https://lock.cmpxchg8b.com/rebinder.html">https://lock.cmpxchg8b.com/rebinder.html</a> ，输入两个127段的地址，得到payload</p>
-<p>![DNS重绑定 Bypass1](CTFHub-Web-SSRF/DNS重绑定 Bypass1.png)</p>
+<p><img src="/2022/01/24/CTFHub-Web-SSRF/DNS%E9%87%8D%E7%BB%91%E5%AE%9ABypass1.png" alt="DNS重绑定 Bypass1"></p>
 <p><code>?url=7f000001.7f000002.rbndr.us/flag.php</code></p>
 <p>直接获取flag</p>
 
@@ -428,7 +428,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-02-13</span>
+                <span>最后编辑：2022-02-21</span>
                 </div>
             </div>
         </footer>
@@ -503,13 +503,13 @@
         
           
           
-            <a class="list-group-item" href="/2022/02/20/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84-proc%E7%9B%AE%E5%BD%95%E4%BD%9C%E7%94%A8/"><i class="fa  fa-book"></i> Linux系统中的/proc目录作用</a>
+            <a class="list-group-item" href="/2022/02/20/BUUCTF%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%80%EF%BC%89/"><i class="fa  fa-book"></i> BUUCTF做题记录（一）</a>
             
           
         
           
           
-            <a class="list-group-item" href="/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"><i class="fa  fa-book"></i> CTFHub-Web-文件上传</a>
+            <a class="list-group-item" href="/2022/02/20/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84-proc%E7%9B%AE%E5%BD%95%E4%BD%9C%E7%94%A8/"><i class="fa  fa-book"></i> Linux系统中的/proc目录作用</a>
             
           
         
