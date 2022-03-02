@@ -4,7 +4,7 @@
   <!-- 元数据 -->
   <meta charset="utf-8">
   <link rel="icon" href="">
-  <title>Linux系统中的/proc目录作用 | 10vexh's Blog.</title>
+  <title>CTFHub-Web-文件上传 | 10vexh's Blog.</title>
   <meta name="author" content="10vexh" />
   <meta http-equiv="Cache-Control" content="no-transform" />
   <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -15,16 +15,16 @@
   
     <meta name="keywords" content="" />
   
-  <meta name="description" content="Linux系统中的&#x2F;proc&#x2F;目录作用​    在做到BUUCTF靶场中的**[第一章 web入门]afr_3**，遇到了一个新的知识点。 &#x2F;proc&#x2F;目录 ​    Linux上的&#x2F;proc&#x2F;目录是一种伪文件系统，它只存在于内存中，不占用外存的空间。它可以以文件系统的方式为访问系统内核数据的操作提供接口。 用户可以通过&#x2F;porc&#x2F;目录得到系统的信息，改变内核的某些参数，由于系统信息是动态改变的，">
+  <meta name="description" content="CTFHub-Web-文件上传​        文件上传是指用户上传了一个可执行的脚本文件，并且通过该文件获取了执行服务器端命令的能力。 无验证​        最基本的文件上传，写一个一句话木马，然后直接上传。会返回上传的路径，然后用蚁剑就可以取了。 1&lt;?php @eval($_POST[&quot;hack&quot;]);?&gt;  前端验证​        在上题的基础上，多了j">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux系统中的&#x2F;proc目录作用">
-<meta property="og:url" content="http://10vexh.top/2022/02/20/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84-proc%E7%9B%AE%E5%BD%95%E4%BD%9C%E7%94%A8/index.html">
+<meta property="og:title" content="CTFHub-Web-文件上传">
+<meta property="og:url" content="http://10vexh.top/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/index.html">
 <meta property="og:site_name" content="10vexh&#39;s Blog.">
-<meta property="og:description" content="Linux系统中的&#x2F;proc&#x2F;目录作用​    在做到BUUCTF靶场中的**[第一章 web入门]afr_3**，遇到了一个新的知识点。 &#x2F;proc&#x2F;目录 ​    Linux上的&#x2F;proc&#x2F;目录是一种伪文件系统，它只存在于内存中，不占用外存的空间。它可以以文件系统的方式为访问系统内核数据的操作提供接口。 用户可以通过&#x2F;porc&#x2F;目录得到系统的信息，改变内核的某些参数，由于系统信息是动态改变的，">
+<meta property="og:description" content="CTFHub-Web-文件上传​        文件上传是指用户上传了一个可执行的脚本文件，并且通过该文件获取了执行服务器端命令的能力。 无验证​        最基本的文件上传，写一个一句话木马，然后直接上传。会返回上传的路径，然后用蚁剑就可以取了。 1&lt;?php @eval($_POST[&quot;hack&quot;]);?&gt;  前端验证​        在上题的基础上，多了j">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://10vexh.top/null">
-<meta property="article:published_time" content="2022-02-20T08:11:19.000Z">
-<meta property="article:modified_time" content="2022-02-20T14:16:45.619Z">
+<meta property="article:published_time" content="2022-02-15T15:32:53.000Z">
+<meta property="article:modified_time" content="2022-02-15T15:32:28.941Z">
 <meta property="article:author" content="10vexh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://10vexh.top/null">
@@ -162,17 +162,17 @@
     <div class="kratos-hentry kratos-post-inner clearfix">
         <header class="kratos-entry-header">
             
-                <h1 class="kratos-entry-title text-center">Linux系统中的/proc目录作用</h1>
+                <h1 class="kratos-entry-title text-center">CTFHub-Web-文件上传</h1>
             
             
             <ul class="kratos-post-meta text-center">
-                <li><i class="fa fa-calendar"></i> 2022-02-20</li>
+                <li><i class="fa fa-calendar"></i> 2022-02-15</li>
                 <li><i class="fa fa-user"></i> 作者 10vexh</li>
                 <li>
                     <i class="fa fa-edit"></i> 
                     
                     
-                        1371
+                        ~1.99K
                     
                     字
                 </li>
@@ -181,28 +181,46 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1645366605619"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1644939148941"></time> 前，其中的内容可能需要更新。
             </div>
             
+                <div class="kratos-post-inner-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.</span> <span class="toc-text">CTFHub-Web-文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E9%AA%8C%E8%AF%81"><span class="toc-number">1.1.</span> <span class="toc-text">无验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E9%AA%8C%E8%AF%81"><span class="toc-number">1.2.</span> <span class="toc-text">前端验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#htaccess"><span class="toc-number">1.3.</span> <span class="toc-text">.htaccess</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MIME%E7%BB%95%E8%BF%87"><span class="toc-number">1.4.</span> <span class="toc-text">MIME绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%A4%B4%E6%A3%80%E6%9F%A5"><span class="toc-number">1.5.</span> <span class="toc-text">文件头检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#00%E6%88%AA%E6%96%AD"><span class="toc-number">1.6.</span> <span class="toc-text">00截断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E5%86%99%E5%90%8E%E7%BC%80"><span class="toc-number">1.7.</span> <span class="toc-text">双写后缀</span></a></li></ol></li></ol>
+                </div>
+            
             <hr />
-            <h1 id="Linux系统中的-proc-目录作用"><a href="#Linux系统中的-proc-目录作用" class="headerlink" title="Linux系统中的/proc/目录作用"></a>Linux系统中的/proc/目录作用</h1><p>​    在做到BUUCTF靶场中的**[第一章 web入门]afr_3**，遇到了一个新的知识点。</p>
-<p><strong>/proc/目录</strong></p>
-<p>​    Linux上的<code>/proc/</code>目录是一种伪文件系统，它只存在于内存中，不占用外存的空间。它可以以文件系统的方式为访问系统内核数据的操作提供接口。</p>
-<p>用户可以通过<code>/porc/</code>目录得到系统的信息，改变内核的某些参数，由于系统信息是动态改变的，因此proc也是动态地读出信息并且提交的。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/proc/sched_debug # 提供cpu上正在运行的进程信息，可以获得进程的pid号，可以配合后面需要pid的利用</span><br><span class="line">/proc/mounts # 挂载的文件系统列表</span><br><span class="line">/proc/net/arp # arp表，可以获得内网其他机器的地址</span><br><span class="line">/proc/net/route # 路由表信息</span><br><span class="line">/proc/net/tcp and /proc/net/udp # 活动连接的信息</span><br><span class="line">/proc/net/fib_trie # 路由缓存</span><br><span class="line">/proc/version  # 内核版本</span><br><span class="line">/proc/[PID]/cmdline # 可能包含有用的路径信息</span><br><span class="line">/proc/[PID]/environ #  程序运行的环境变量信息，可以用来包含getshell</span><br><span class="line">/proc/[PID]/cwd     # 当前进程的工作目录</span><br><span class="line">/proc/[PID]/fd/[#] # 访问file descriptors，某写情况可以读取到进程正在使用的文件，比如access.log</span><br></pre></td></tr></table></figure>
+            <h1 id="CTFHub-Web-文件上传"><a href="#CTFHub-Web-文件上传" class="headerlink" title="CTFHub-Web-文件上传"></a>CTFHub-Web-文件上传</h1><p>​        文件上传是指用户上传了一个可执行的脚本文件，并且通过该文件获取了执行服务器端命令的能力。</p>
+<h2 id="无验证"><a href="#无验证" class="headerlink" title="无验证"></a>无验证</h2><p>​        最基本的文件上传，写一个一句话木马，然后直接上传。会返回上传的路径，然后用蚁剑就可以取了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php @eval($_POST[&quot;hack&quot;]);?&gt;</span><br></pre></td></tr></table></figure>
 
-<p>而<code>/proc/self</code>表示当前工作进程的ID的符号链接.</p>
-<p>我们在本题可以在<code>../../../proc/self/cmdline</code>下发现一个py文件正在进行运行。我们也可以通过<code>../../../proc/self/cwd/server.py</code>来发现存在一个<code>server.py</code>的内容</p>
-<p>发现里面运行着<code>flag.py</code>和<code>key.py</code>,访问<code>key.py</code>得到key。</p>
-<p>代码里有两种路径，而第一种是<code>/n1page</code>,该路径下存在<code>ssti</code>漏洞，第二种是<code>/article</code>,我们需要将<code>n1code</code>参数及其值装进<code>session</code>中，然后进行传参，达到<code>ssti</code>的目的。</p>
-<p>这里有第二个知识点<strong>FLASK之session伪造</strong></p>
-<p>通过链接获取加密脚本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/noraj/flask-session-cookie-manager</span><br></pre></td></tr></table></figure>
+<h2 id="前端验证"><a href="#前端验证" class="headerlink" title="前端验证"></a>前端验证</h2><p>​        在上题的基础上，多了js前端验证，我们依然上传上一题的php文件，发现被前端拦截</p>
+<p><img src="/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/%E5%89%8D%E7%AB%AF%E9%AA%8C%E8%AF%811.png" alt="前端验证1"></p>
+<p>我们通过查看源代码，发现只能上传<code>jpg</code>,<code>png</code>,<code>gif</code>。因此我们可以先把后缀改成可以上传的jpg，然后通过抓包更改为php成功上传。再得到相对路径利用蚁剑进行连接。</p>
+<p><img src="/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/%E5%89%8D%E7%AB%AF%E9%AA%8C%E8%AF%812.png" alt="前端验证2"></p>
+<h2 id="htaccess"><a href="#htaccess" class="headerlink" title=".htaccess"></a>.htaccess</h2><p>​        htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能</p>
+<p>​        我们通过上传一个.htaccess文件，令Apache把所有的.xxx文件都解析为php文件。</p>
+<p>.htaccess内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SetHandler application/x-httpd-php</span><br></pre></td></tr></table></figure>
 
-<p>然后执行加密语句</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 ./flask_session_cookie_manager3.py encode -s &quot;Drmhze6EPcv0fN_81Bj-nA&quot; -t &quot;&#123;&#x27;n1code&#x27;: &#x27;&#123;&#123;\&#x27;\&#x27;.__class__.__mro__[2].__subclasses__()[71].__init__.__globals__[\&#x27;os\&#x27;].popen(\&#x27;cat flag.py\&#x27;).read()&#125;&#125;&#x27;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>上传完成后，再传我们上一题的<code>hack.jpg</code>文件，会被默认执行为php文件，从而实现注入。</p>
+<h2 id="MIME绕过"><a href="#MIME绕过" class="headerlink" title="MIME绕过"></a>MIME绕过</h2><p>​        <strong>MIME</strong>(<strong>M</strong>ultipurpose <strong>I</strong>nternet <strong>M</strong>ail <strong>E</strong>xtensions)多用途互联网邮件扩展类型。是设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。</p>
+<p>​        服务端<code>MIME</code>类型检测是通过检查http包的Content-Type字段中的值来判断上传文件是否合法的。</p>
+<p>​        常见的<code>MIME</code>类型比如有text/html，image/jpeg，application/json等等，我们可以先传一个正常的php文件，通过抓包更改他的Content-Type字段，改成可以通过的字段，然后放包进行成功的注入。</p>
+<p><img src="/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/MIME%E7%BB%95%E8%BF%87.png" alt="MIME绕过"></p>
+<p>同样利用蚁剑获取flag。</p>
+<h2 id="文件头检查"><a href="#文件头检查" class="headerlink" title="文件头检查"></a>文件头检查</h2><p>​        这题我们要在前面题目的基础上，加入图片马。将我们的一句话木马和图片合在一起，进行绕过。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy 1.png/b+hack.php/a flag.php</span><br></pre></td></tr></table></figure>
 
-<p>将得到的cookie抓包替换掉原来的cookie得到flag.</p>
+<p>然后上传我们的flag.php文件，通过bp将他的Content-Type改成图片的image/jpeg，进行绕过。</p>
+<p>成功上传，蚁剑连接得到flag.</p>
+<h2 id="00截断"><a href="#00截断" class="headerlink" title="00截断"></a>00截断</h2><p>题目说了要了解一下 PHP 5.2 00截断上传的原理</p>
+<p><code>%00</code>是字符串结束的标识，攻击者通过主动添加标识符来进行截断。</p>
+<p>在数据包存在上传路径的时候，比如这题遇到的上传路径为<code>/var/www/html/upload</code>，我们可以直接在路径之后加入<code>hack.php%00</code>进行截断。然后在蚁剑中通过<code>url/upload/hack.php</code>的路径进行读取flag.</p>
+<p><img src="/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/00%E6%88%AA%E6%96%AD.png" alt="00截断"></p>
+<h2 id="双写后缀"><a href="#双写后缀" class="headerlink" title="双写后缀"></a>双写后缀</h2><p>​        这个就和sql的双写绕过一个套路，我们在前面测试的时候发现，上传hack.php文件，会被语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$name = basename($_FILES[&#x27;file&#x27;][&#x27;name&#x27;]);</span><br><span class="line">$blacklist = array(&quot;php&quot;, &quot;php5&quot;, &quot;php4&quot;, &quot;php3&quot;, &quot;phtml&quot;, &quot;pht&quot;, &quot;jsp&quot;, &quot;jspa&quot;, &quot;jspx&quot;, &quot;jsw&quot;, &quot;jsv&quot;, &quot;jspf&quot;, &quot;jtml&quot;, &quot;asp&quot;, &quot;aspx&quot;, &quot;asa&quot;, &quot;asax&quot;, &quot;ascx&quot;, &quot;ashx&quot;, &quot;asmx&quot;, &quot;cer&quot;, &quot;swf&quot;, &quot;htaccess&quot;, &quot;ini&quot;);</span><br><span class="line">$name = str_ireplace($blacklist, &quot;&quot;, $name);</span><br></pre></td></tr></table></figure>
+
+<p>进行过滤，将我们的php用空格替换，因此我们可以把后缀改成<code>phphpp</code>，中间php过滤后还有一个php，成功识别实现注入。</p>
 
         </div>
         
@@ -256,7 +274,7 @@
     <script type="text/javascript">
         $(()=>{
             new QRCode("wechat-qr", {
-                text: "http://10vexh.top/2022/02/20/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84-proc%E7%9B%AE%E5%BD%95%E4%BD%9C%E7%94%A8/",
+                text: "http://10vexh.top/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/",
                 width: 150,
                 height: 150,
                 correctLevel : QRCode.CorrectLevel.H
@@ -268,11 +286,10 @@
             const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
             const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
             const twitterBase   = "https://twitter.com/intent/tweet?";
-            const hostUrl       = "http://10vexh.top/2022/02/20/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84-proc%E7%9B%AE%E5%BD%95%E4%BD%9C%E7%94%A8/";
-            const title         = "「Linux系统中的/proc目录作用」";
-            const excerpt       = `Linux系统中的/proc/目录作用​    在做到BUUCTF靶场中的**[第一章 web入门]afr_3**，遇到了一个新的知识点。
-/proc/目录
-​    Linux上的/proc/目录是一种伪文件系统，它只存在于内存中，...`;
+            const hostUrl       = "http://10vexh.top/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/";
+            const title         = "「CTFHub-Web-文件上传」";
+            const excerpt       = `CTFHub-Web-文件上传​        文件上传是指用户上传了一个可执行的脚本文件，并且通过该文件获取了执行服务器端命令的能力。
+无验证​        最基本的文件上传，写一个一句话木马，然后直接上传。会返回上传的路径，然后...`;
             let _URL;
             switch (dest) {
                 case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
@@ -294,7 +311,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-02-20</span>
+                <span>最后编辑：2022-02-15</span>
                 </div>
             </div>
         </footer>
@@ -303,12 +320,12 @@
         <nav class="navigation post-navigation clearfix" role="navigation">
             
             <div class="nav-previous clearfix">
-                <a title=" CTFHub-Web-文件上传" href="/2022/02/15/CTFHub-Web-文件上传/">&lt; 上一篇</a>
+                <a title=" CTFHub-Web-RCE" href="/2022/02/15/CTFHub-Web-RCE/">&lt; 上一篇</a>
             </div>
             
             
             <div class="nav-next clearfix">
-                <a title=" BUUCTF做题记录（一）" href="/2022/02/20/BUUCTF做题记录（一）/">下一篇 &gt;</a>
+                <a title=" Linux系统中的/proc目录作用" href="/2022/02/20/Linux系统中的-proc目录作用/">下一篇 &gt;</a>
             </div>
             
         </nav>
@@ -342,6 +359,18 @@
 </aside>
             
                     <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix">
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar"></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">CTFHub-Web-文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E9%AA%8C%E8%AF%81"><span class="toc-text">无验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E9%AA%8C%E8%AF%81"><span class="toc-text">前端验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#htaccess"><span class="toc-text">.htaccess</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MIME%E7%BB%95%E8%BF%87"><span class="toc-text">MIME绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%A4%B4%E6%A3%80%E6%9F%A5"><span class="toc-text">文件头检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#00%E6%88%AA%E6%96%AD"><span class="toc-text">00截断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E5%86%99%E5%90%8E%E7%BC%80"><span class="toc-text">双写后缀</span></a></li></ol></li></ol>
+    </div>
+</aside>
                 
                 
 
