@@ -162,104 +162,50 @@
 
     
     
-        <article class="kratos-hentry kratos-entry-border-new clearfix">
-            <div class="kratos-status">
+        <article class="kratos-hentry clearfix">
+            <div class="kratos-entry-border-new clearfix">
                 
-                    <i class="fa fa-refresh"></i>
-                
-                <div class="kratos-status-inner">
-                    <div class="kratos-status-content">
+                <div class="kratos-entry-thumb-new">
+                    <a href="/2022/03/17/WEB%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/">
                         
-                            <h1 id="WEB基础漏洞"><a href="#WEB基础漏洞" class="headerlink" title="WEB基础漏洞"></a>WEB基础漏洞</h1><h2 id="逻辑漏洞"><a href="#逻辑漏洞" class="headerlink" title="逻辑漏洞"></a>逻辑漏洞</h2><p>测试流程</p>
-<blockquote>
-<p>1.正常找回密码</p>
-<p>2.分析数据包</p>
-<p>3.分析后台验证机制</p>
-<p>4.修改数据包验证</p>
-</blockquote>
-<h3 id="漏洞点"><a href="#漏洞点" class="headerlink" title="漏洞点"></a>漏洞点</h3><p>身份验证</p>
-<blockquote>
-<p>暴力破解</p>
-<p>弱加密</p>
-<p>固定php中的session_id：</p>
-<p>​    用户登录站点后得到了session，然后这个session被攻击者获取了，攻击者就直接利用这个session，伪造登录。</p>
-<p>​    获取方式：一般通过爆破，预测，窃取等方式来获取这个session。</p>
-<p>​    防御方式：更改Session名称，一般默认的是PHPSESSID，如果被修改了没猜到就无法进行破解。关闭透明化Session ID。设置HttpOnly。 关闭所有phpinfo类dump request信息的页面。验证HTTP头部信息。</p>
-<p>可破解cookie：和session类似</p>
-</blockquote>
-<p>业务一致性</p>
-<blockquote>
-<p>手机号/id/邮箱/订单号篡改</p>
-</blockquote>
-<p>业务数据篡改</p>
-<p>业务授权</p>
-<p>用户凭证</p>
-<blockquote>
-<p>有效性：</p>
-<p>验证码手机号不关联</p>
-<p>邮件username未验证</p>
-<p>步骤缺乏中间验证</p>
-<p>暴力破解：</p>
-<p>邮箱弱token时间戳生成</p>
-<p>4/6位验证码不失效，无限制次数</p>
-</blockquote>
-<p>密码找回返回凭证</p>
-<blockquote>
-<p>url返回验证码及token</p>
-<p>response中有token</p>
-<p>response中返回短信验证码</p>
-</blockquote>
-<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><h3 id="解析攻击"><a href="#解析攻击" class="headerlink" title="解析攻击"></a>解析攻击</h3><blockquote>
-<p>直接解析：上传一句话木马后直接解析</p>
-<p>本地文件包含：正常传一个图片马，然后如果存在漏洞则可以被包含木马，然后jpg被解析成php然后利用。</p>
-<p>.htaccess解析：我们通过上传一个.htaccess文件，令Apache把所有的.xxx文件都解析为php文件。</p>
-</blockquote>
-<h3 id="中间件解析"><a href="#中间件解析" class="headerlink" title="中间件解析"></a>中间件解析</h3><h4 id="Apache：从右往左"><a href="#Apache：从右往左" class="headerlink" title="Apache：从右往左"></a>Apache：从右往左</h4><p>攻击：Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。比如xxx.php.rar对apache来说rar是不可解析的，所以就会解析成xxx.php</p>
-<p>如何防御：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">对apache的配置文件做适当修改，在文件中添加下面几行代码</span><br><span class="line"></span><br><span class="line">&lt;FilesMatch “.(php.|php3.|php4.|php5.)”&gt;</span><br><span class="line"></span><br><span class="line">Order Deny,Allow</span><br><span class="line"></span><br><span class="line">Deny from all</span><br><span class="line"></span><br><span class="line">禁止*.php.*文件的访问权限</span><br></pre></td></tr></table></figure>
-
-<h4 id="Nginx：-00截断"><a href="#Nginx：-00截断" class="headerlink" title="Nginx：%00截断"></a>Nginx：%00截断</h4><p><code>%00</code> 是<code>urlencode</code>之后的值，decode 之后是个字符串，但会导致解析扩展名时失败。比如文件名改成<code>abc.php%00</code>，会使得无法正确识别出<code>php</code>的后缀。</p>
-<h4 id="IIS6-0：目录解析，文件解析"><a href="#IIS6-0：目录解析，文件解析" class="headerlink" title="IIS6.0：目录解析，文件解析"></a>IIS6.0：目录解析，文件解析</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41210745/article/details/103423327">https://blog.csdn.net/qq_41210745/article/details/103423327</a></p>
-<p>​    在已经启动的网站下文件夹的名为 .asp、.asa 、.cer的文件夹，其目录内的任何扩展名的文件都被IIS当作asp文件来解析并执行</p>
-<p>​    在web目录下，”;” “.” “/“均可以当做截断，IIS6.0只解析这些符号前面的可解析文件</p>
-<p>漏洞防御：</p>
-<p><em><strong>*目录解析漏洞*</strong></em></p>
-<p>禁止在网站目录下创建目录，或者创建目录名规则中禁止含符号”.”</p>
-<p><em><strong>*文件解析漏洞*</strong></em></p>
-<p>对文件名命名进行限制、过滤，如：*/*.asp/<em>、</em>*.asp*等方式，</p>
-<p>限制上传脚本文件的执行权限</p>
-<h4 id="IIS7-0-7-5-Nginx-lt-8-03：Fast-CGI-php"><a href="#IIS7-0-7-5-Nginx-lt-8-03：Fast-CGI-php" class="headerlink" title="IIS7.0/7.5 Nginx&lt;8.03：Fast-CGI */*.php*"></a>IIS7.0/7.5 Nginx&lt;8.03：Fast-CGI */*.php*</h4><p>在默认Fast-CGI开启状况下,在一个文件路径(/xx.jpg)后面加上/xx.php会将 /xx.jpg/xx.php 解析为 php 文件。</p>
-<blockquote>
-<p>在默认Fast-CGI开启状况下,在一个文件路径(/xx.jpg)后面加上/xx.php会将 /xx.jpg/xx.php 解析为 php 文件。</p>
-<p>常用利用方法： 将一张图和一个写入后门代码的文本文件合并 将恶意文本写入图片的二进制代码之后，避免破坏图片文件头和尾</p>
-<p>e.g. copy xx.jpg/b + yy.txt/a xy.jpg</p>
-<p>######################################</p>
-<p>/b 即二进制[binary]模式</p>
-<p>/a 即ascii模式 xx.jpg正常图片文件</p>
-<p>yy.txt 内容 <?PHP fputs(fopen(‘shell.php’,'w’),’<?php eval($_POST[cmd])?>’);?&gt;</p>
-<p>意思为写入一个内容为 <?php eval($_POST[cmd])?> 名称为shell.php的文件</p>
-<p>######################################</p>
-<p>找个地方上传 xy.jpg ,然后找到 xy.jpg 的地址，在地址后加上 /xx.php 即可执行恶意文本。</p>
-<p>然后就在图片目录下生成一句话木马 shell.php 密码 cmd</p>
-</blockquote>
-<p>在Fast-CGI关闭的情况下，Nginx &lt;=0.8.37 依然存在解析漏洞</p>
-<blockquote>
-<p>在一个文件路径(/xx.jpg)后面加上%00.php会将 /xx.jpg%00.php 解析为 php 文件。</p>
-</blockquote>
-<h3 id="上传漏洞"><a href="#上传漏洞" class="headerlink" title="上传漏洞"></a>上传漏洞</h3><h5 id="客户端解析（javascript）"><a href="#客户端解析（javascript）" class="headerlink" title="客户端解析（javascript）"></a>客户端解析（javascript）</h5><h5 id="服务端解析"><a href="#服务端解析" class="headerlink" title="服务端解析"></a>服务端解析</h5><p>MIME类型</p>
-<p>目录路径</p>
-<p>文件拓展名：黑名单，白名单，.htaccess文件攻击</p>
-<p>文件内容：文件幻数，文件相关信息，文件加载</p>
-
+                            <img class="kratos-entry-thumb-new-img">
                         
+                    </a>
+                </div>
+                <div class="kratos-post-inner-new">
+                    <header class="kratos-entry-header-new">
+                            
+                        <h2 class="kratos-entry-title-new"><a href="/2022/03/17/WEB%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/">WEB基础漏洞</a>
+                    </header>
+                    <div class="kratos-entry-content-new">
+                        <p>
+                            
+                                WEB基础漏洞逻辑漏洞测试流程
+
+1.正常找回密码
+2.分析数据包
+3.分析后台验证机制
+4.修改数据包验证
+
+漏洞点身份验证
+
+暴力破解
+弱加密
+固定php中的session_id：
+​    用户登录站点后得到了session，然...
+                            
+                        </p>
                     </div>
                 </div>
-            </div>
-            
                 <footer class="kratos-post-meta-new">
                     <span class="pull-left">
-                        <a><i class="fa fa-calendar"></i></a><a>2022-03-10</a>
-                        
+                        <a>
+                            <i class="fa fa-calendar"></i>
+                            2022-03-17
+                        </a>
+                        <a>
+                            
+                        </a>
                         
                             <!-- 当前仅支持valine/waline自带的统计功能 -->
                             
@@ -269,15 +215,11 @@
                             
                         
                     </span>
-                    
-                    
-                        <span class="pull-right">
-                            <a class="read-more" href="/2022/03/10/WEB%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/" title="留言">留言<i class="fa fa-chevron-circle-right"></i></a>
-                        </span>
-                    
-
+                    <span class="pull-right">
+                        <a class="read-more" href="/2022/03/17/WEB%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/" title="阅读全文">阅读全文<i class="fa fa-chevron-circle-right"></i></a>
+                    </span>
                 </footer>
-            
+            </div>
         </article>
     
 
@@ -667,6 +609,9 @@
         
           
           
+            <a class="list-group-item" href="/2022/03/17/WEB%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"><i class="fa  fa-book"></i> WEB基础漏洞</a>
+            
+          
         
           
           
@@ -693,11 +638,7 @@
           
         
           
-          
-            <a class="list-group-item" href="/2022/01/03/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"><i class="fa  fa-book"></i> sql-lab刷题记录</a>
             
-          
-        
           
             
       </ul>
